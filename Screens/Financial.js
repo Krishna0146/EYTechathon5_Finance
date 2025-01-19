@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const FinTools = () => {
   const [expandedTool, setExpandedTool] = useState(null);
+  const { t } = useTranslation();
 
   const toggleToolDetails = (tool) => {
     if (expandedTool === tool) {
@@ -44,7 +46,7 @@ const FinTools = () => {
         <View style={styles.box}></View>
         <View style={styles.box}></View>
         <View style={styles.box}></View>
-        <Text style={styles.topSectionText}>Financial Tools</Text>
+        <Text style={styles.topSectionText}>{t('Financial Tools')}</Text>
       </View>
 
       {/* Main Section */}
@@ -54,7 +56,7 @@ const FinTools = () => {
             <Text style={styles.toolName}>{tool.name}</Text>
             <View style={styles.toolActions}>
               <TouchableOpacity style={styles.goButton}>
-                <Text style={styles.goButtonText}>Go</Text>
+                <Text style={styles.goButtonText}>{t('Go')}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => toggleToolDetails(tool.name)}>
                 <Text style={styles.arrow}>

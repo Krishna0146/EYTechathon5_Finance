@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from 'react-i18next';
 
 const MultiStageForm = () => {
   const [stage, setStage] = useState(1);
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   // State for Stage 1
   const [age, setAge] = useState('');
@@ -43,10 +45,10 @@ const MultiStageForm = () => {
       case 1:
         return (
           <ScrollView contentContainerStyle={styles.formContainer}>
-            <Text style={styles.stageTitle}>Stage 1: Enter Basic Details</Text>
+            <Text style={styles.stageTitle}>{t('Stage 1: Enter Basic Details')}</Text>
 
             {/* Age */}
-            <Text style={styles.label}>Age:</Text>
+            <Text style={styles.label}>{t('Age')}:</Text>
             <TextInput
               style={[styles.input, errors.age ? styles.inputError : null]}
               keyboardType="numeric"
@@ -57,7 +59,7 @@ const MultiStageForm = () => {
             {errors.age && <Text style={styles.errorText}>{errors.age}</Text>}
 
             {/* Gender */}
-            <Text style={styles.label}>Gender:</Text>
+            <Text style={styles.label}>{t('Gender')}:</Text>
             <View style={[styles.pickerContainer, errors.gender ? styles.inputError : null]}>
               <Picker
                 selectedValue={gender}
@@ -72,7 +74,7 @@ const MultiStageForm = () => {
             {errors.gender && <Text style={styles.errorText}>{errors.gender}</Text>}
 
             {/* Location */}
-            <Text style={styles.label}>Location:</Text>
+            <Text style={styles.label}>{t('Location')}:</Text>
             <TextInput
               style={[styles.input, errors.location ? styles.inputError : null]}
               placeholder="Enter your location"
@@ -82,7 +84,7 @@ const MultiStageForm = () => {
             {errors.location && <Text style={styles.errorText}>{errors.location}</Text>}
 
             {/* Occupation */}
-            <Text style={styles.label}>Occupation:</Text>
+            <Text style={styles.label}>{t('Occupation')}:</Text>
             <TextInput
               style={[styles.input, errors.occupation ? styles.inputError : null]}
               placeholder="Enter your occupation"
@@ -92,7 +94,7 @@ const MultiStageForm = () => {
             {errors.occupation && <Text style={styles.errorText}>{errors.occupation}</Text>}
 
             {/* Education */}
-            <Text style={styles.label}>Education:</Text>
+            <Text style={styles.label}>{t('Education')}:</Text>
             <View style={[styles.pickerContainer, errors.education ? styles.inputError : null]}>
               <Picker
                 selectedValue={education}

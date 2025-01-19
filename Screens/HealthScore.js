@@ -1,17 +1,20 @@
 import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const FinancialHealthScore = () => {
+  const { t } = useTranslation();
+
   return (
     <ScrollView style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>Your Financial Health Score</Text>
+        <Text style={styles.headerText}>{t('Your Financial Health Score')}</Text>
       </View>
 
       {/* Score Display Section */}
       <View style={styles.scoreSection}>
-        <Text style={styles.sectionHeading}>Your Score</Text>
+        <Text style={styles.sectionHeading}>{t('Your Score')}</Text>
 
         {/* Score Box */}
         <View style={styles.scoreBox}>

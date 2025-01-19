@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const QuizPage = ({ route, navigation }) => {
   const selectedTopics = route?.params?.selectedTopics || []; // Safely access params
   const [opacityStart, setOpacityStart] = useState(1);
   const [opacitySkip, setOpacitySkip] = useState(1);
+  const { t } = useTranslation();
 
   const handleStartQuiz = () => {
     console.log("Starting quiz for topics: ", selectedTopics);
@@ -21,7 +23,7 @@ const QuizPage = ({ route, navigation }) => {
       <SafeAreaView style={styles.container}>
         <Text style={styles.message}>No topics selected. Please go back and select topics.</Text>
         <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
-          <Text style={styles.buttonText}>Go Back</Text>
+          <Text style={styles.buttonText}>{t('Go Back')}</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -30,13 +32,13 @@ const QuizPage = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Your Selected Topics</Text>
+        <Text style={styles.title}>{t('Your Selected Topics')}</Text>
         <View style={styles.topicsContainer}>
           {selectedTopics.map((topic, index) => (
             <Text key={index} style={styles.topicText}>{topic}</Text>
           ))}
         </View>
-        <Text style={styles.question}>Do you want to take the quiz?</Text>
+        <Text style={styles.question}>{t('Do you want to take the quiz?')}</Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, { opacity: opacityStart }]}
@@ -44,7 +46,7 @@ const QuizPage = ({ route, navigation }) => {
             onPressIn={() => setOpacityStart(0.6)} // Set opacity on press
             onPressOut={() => setOpacityStart(1)} // Reset opacity after press
           >
-            <Text style={styles.buttonText}>Start Quiz</Text>
+            <Text style={styles.buttonText}>{t('Start Quiz')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, { opacity: opacitySkip }]}
@@ -52,7 +54,7 @@ const QuizPage = ({ route, navigation }) => {
             onPressIn={() => setOpacitySkip(0.6)} // Set opacity on press
             onPressOut={() => setOpacitySkip(1)} // Reset opacity after press
           >
-            <Text style={styles.buttonText}>Skip Quiz</Text>
+            <Text style={styles.buttonText}>{t('Skip Quiz')}</Text>
           </TouchableOpacity>
         </View>
       </View>

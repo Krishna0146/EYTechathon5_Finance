@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const newsData = [
   {
@@ -51,6 +52,7 @@ const scamData = [
 
 const News = () => {
   const [activeTab, setActiveTab] = useState('news'); // Default to show news
+  const { t } = useTranslation();
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
@@ -69,19 +71,19 @@ const News = () => {
     <View style={styles.container}>
       {/* Top Section with News */}
       <View style={styles.topSection}>
-        <Text style={styles.topText}>News</Text>
+        <Text style={styles.topText}>{t('News')}</Text>
       </View>
 
       {/* Scam Alerts and News buttons */}
       <View style={styles.tabContainer}>
         <TouchableOpacity onPress={() => handleTabPress('scam')}>
           <Text style={[styles.tabButton, activeTab === 'scam' && styles.activeTab]}>
-            Scam Alerts
+          {t('Scam Alerts')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleTabPress('news')}>
           <Text style={[styles.tabButton, activeTab === 'news' && styles.activeTab]}>
-            News
+          {t('News')}
           </Text>
         </TouchableOpacity>
       </View>

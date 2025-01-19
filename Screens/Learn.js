@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, Image, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 const LearnPage = () => {
   const navigation = useNavigation();
   const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const { t } = useTranslation();
 
   // Animation value for custom switch
   const translateX = useState(new Animated.Value(0))[0];
@@ -54,7 +56,7 @@ const LearnPage = () => {
       </View>
 
       {/* Styled Initial Text */}
-      <Text style={styles.initialText}>Basics</Text>
+      <Text style={styles.initialText}>{t('Basics')}</Text>
 
       {/* Horizontal Scroll for Video Thumbnails */}
       <ScrollView horizontal style={styles.horizontalScroll}>
@@ -72,7 +74,7 @@ const LearnPage = () => {
 
       {/* Trading and Bonds Text Section */}
       <View style={styles.tradingBondsContainer}>
-        <Text style={styles.tradingBondsText}>Trading and Bonds</Text>
+        <Text style={styles.tradingBondsText}>{t('Trading and Bonds')}</Text>
 
         {/* Custom Switch */}
         <TouchableOpacity onPress={toggleSwitch} style={styles.switch}>

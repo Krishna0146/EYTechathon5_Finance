@@ -101,7 +101,7 @@ const ExpenseTracker = () => {
 
       {/* Input Section */}
       <View style={styles.inputBlock}>
-        <Text style={styles.label}>Amount</Text>
+        <Text style={styles.label}>{t('Amount')}</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter amount"
@@ -110,7 +110,7 @@ const ExpenseTracker = () => {
           onChangeText={setAmount}
         />
 
-        <Text style={styles.label}>Category</Text>
+        <Text style={styles.label}>{t('Category')}</Text>
         <Picker
           selectedValue={category}
           style={styles.picker}
@@ -121,7 +121,7 @@ const ExpenseTracker = () => {
           ))}
         </Picker>
 
-        <Text style={styles.label}>Date</Text>
+        <Text style={styles.label}>{t('Date')}</Text>
         <TouchableOpacity
           style={styles.datePickerButton}
           onPress={() => setIsCalendarVisible(true)}>
@@ -133,7 +133,7 @@ const ExpenseTracker = () => {
 
       {/* Add Button */}
       <TouchableOpacity style={styles.addButton} onPress={handleAddExpense}>
-        <Text style={styles.addButtonText}>Add</Text>
+        <Text style={styles.addButtonText}>{t('Add')}</Text>
       </TouchableOpacity>
 
       {/* Month Navigation */}
@@ -165,7 +165,7 @@ const ExpenseTracker = () => {
           <TouchableOpacity
             style={styles.closeModalButton}
             onPress={() => setIsCalendarVisible(false)}>
-            <Text style={styles.closeModalButtonText}>Close</Text>
+            <Text style={styles.closeModalButtonText}>{t('Close')}</Text>
           </TouchableOpacity>
         </View>
       </Modal>

@@ -2,9 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTranslation } from 'react-i18next';
 
 const HomePage = () => {
   const navigate = useNavigation();
+  const { t } = useTranslation();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -35,7 +37,7 @@ const HomePage = () => {
               style={styles.backgroundImage}
               imageStyle={styles.imageStyle}>
               <Icon name="school" size={30} color="white" style={styles.icon} />
-              <Text style={styles.boxName}>Learning Stream</Text>
+              <Text style={styles.boxName}>{t('Learning Stream')}</Text>
             </ImageBackground>
           </TouchableOpacity>
           <TouchableOpacity
@@ -46,7 +48,7 @@ const HomePage = () => {
               style={styles.backgroundImage}
               imageStyle={styles.imageStyle}>
               <Icon name="wallet" size={30} color="white" style={styles.icon} />
-              <Text style={styles.boxName}>Banking</Text>
+              <Text style={styles.boxName}>{t('Banking')}</Text>
             </ImageBackground>
           </TouchableOpacity>
         </View>
@@ -71,7 +73,7 @@ const HomePage = () => {
               style={styles.backgroundImage}
               imageStyle={styles.imageStyle}>
               <Icon name="calculator" size={30} color="white" style={styles.icon} />
-              <Text style={styles.boxName}>Virtual Portfolio</Text>
+              <Text style={styles.boxName}>{t('Virtual Portfolio')}</Text>
             </ImageBackground>
           </TouchableOpacity>
         </View>
@@ -84,7 +86,7 @@ const HomePage = () => {
             style={styles.backgroundImage}
             imageStyle={styles.imageStyle}>
             <Icon name="newspaper" size={30} color="white" style={styles.icon} />
-            <Text style={styles.boxName}>Financial Tools</Text>
+            <Text style={styles.boxName}>{t('Financial Tools')}</Text>
           </ImageBackground>
         </TouchableOpacity>
         <TouchableOpacity
@@ -95,7 +97,7 @@ const HomePage = () => {
             style={styles.backgroundImage}
             imageStyle={styles.imageStyle}>
             <Icon name="trending-up" size={30} color="white" style={styles.icon} />
-            <Text style={styles.boxName}>Invest</Text>
+            <Text style={styles.boxName}>{t('Invest')}</Text>
           </ImageBackground>
         </TouchableOpacity>
         </View>
@@ -108,7 +110,7 @@ const HomePage = () => {
               style={styles.backgroundImage}
               imageStyle={styles.imageStyle}>
               <Icon name="arrow-down-circle" size={30} color="white" style={styles.icon} />
-              <Text style={styles.boxName}>Expense Tracker</Text>
+              <Text style={styles.boxName}>{t('Expense Tracker')}</Text>
             </ImageBackground>
           </TouchableOpacity>
           <TouchableOpacity
@@ -119,7 +121,7 @@ const HomePage = () => {
               style={styles.backgroundImage}
               imageStyle={styles.imageStyle}>
               <Icon name="people" size={30} color="white" style={styles.icon} />
-              <Text style={styles.boxName}>News</Text>
+              <Text style={styles.boxName}>{t('News')}</Text>
             </ImageBackground>
           </TouchableOpacity>
         </View>
@@ -132,7 +134,7 @@ const HomePage = () => {
             style={styles.backgroundImage}
             imageStyle={styles.imageStyle}>
             <Icon name="stats-chart" size={30} color="white" style={styles.icon} />
-            <Text style={styles.boxName}>Financial HealthScore</Text>
+            <Text style={styles.boxName}>{t('Financial HealthScore')}</Text>
           </ImageBackground>
         </TouchableOpacity>
         <TouchableOpacity
@@ -143,7 +145,7 @@ const HomePage = () => {
             style={styles.backgroundImage}
             imageStyle={styles.imageStyle}>
             <Icon name="stats-chart" size={30} color="white" style={styles.icon} />
-            <Text style={styles.boxName}>Community</Text>
+            <Text style={styles.boxName}>{t('Community')}</Text>
           </ImageBackground>
         </TouchableOpacity>
         </View>

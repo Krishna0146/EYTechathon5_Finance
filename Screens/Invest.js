@@ -9,6 +9,7 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const InvestmentPage = () => {
   const [selectedOption, setSelectedOption] = useState('Select');
@@ -57,11 +58,13 @@ const InvestmentPage = () => {
     setPrice('');
   };
 
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>Investment</Text>
+        <Text style={styles.headerText}>{t('Investment')}</Text>
       </View>
 
       {/* Search and Filter Section */}
@@ -93,7 +96,7 @@ const InvestmentPage = () => {
       {selectedOption === 'ETF' && (
         <View style={styles.etfHeaderBox}>
           <Text style={styles.etfHeaderText}>ETF Name</Text>
-          <Text style={styles.etfHeaderPrice}>Current Price</Text>
+          <Text style={styles.etfHeaderPrice}>{t('Current Price')}</Text>
         </View>
       )}
 
@@ -122,7 +125,7 @@ const InvestmentPage = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>{selectedETF?.name}</Text>
-            <Text style={styles.modalPrice}>Price: ₹{selectedETF?.price}</Text>
+            <Text style={styles.modalPrice}>{t('Price')}: ₹{selectedETF?.price}</Text>
             <View style={styles.line} />
             <View style={styles.inputRow}>
               <TextInput
@@ -145,13 +148,13 @@ const InvestmentPage = () => {
                 style={[styles.actionButton, styles.buyButton]}
                 onPress={() => handleOrder('Buy')}
               >
-                <Text style={styles.buttonText}>Buy</Text>
+                <Text style={styles.buttonText}>{t('Buy')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.actionButton, styles.sellButton]}
                 onPress={() => handleOrder('Sell')}
               >
-                <Text style={styles.buttonText}>Sell</Text>
+                <Text style={styles.buttonText}>{t('Sell')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -161,16 +164,16 @@ const InvestmentPage = () => {
       {/* Footer Navigation */}
       <View style={styles.footer}>
         <View style={styles.footerOptionBox}>
-          <Text style={styles.footerOption}>Watchlist</Text>
+          <Text style={styles.footerOption}>{t('Watchlist')}</Text>
         </View>
         <View style={styles.footerOptionBox}>
-          <Text style={styles.footerOption}>Orders</Text>
+          <Text style={styles.footerOption}>{t('Orders')}</Text>
         </View>
         <View style={styles.footerOptionBox}>
-          <Text style={styles.footerOption}>Portfolio</Text>
+          <Text style={styles.footerOption}>{t('Portfolio')}</Text>
         </View>
         <View style={styles.footerOptionBox}>
-          <Text style={styles.footerOption}>Account</Text>
+          <Text style={styles.footerOption}>{t('Account')}</Text>
         </View>
       </View>
     </View>

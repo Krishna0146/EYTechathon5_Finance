@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const CommunityPage = () => {
   const [searchText, setSearchText] = useState('');
@@ -13,11 +14,13 @@ const CommunityPage = () => {
     { id: '5', name: 'Retirement Planning Circle', profile: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhp8sfOU9xMl1L7aR3SF2NsTK2vRkEq6_HEw&s' },
   ];
 
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>Community</Text>
+        <Text style={styles.headerText}>{t('Community')}</Text>
       </View>
 
       {/* Search Box */}
