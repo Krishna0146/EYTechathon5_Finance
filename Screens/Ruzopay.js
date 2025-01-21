@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Or any other icon set
 
-const PaymentPage = () => {
+const PaymentPage = ({ navigation }) => {
+  // Icon Rows
   const iconsRow1 = [
-    { name: 'Mobile Number', icon: 'phone' },
+    { name: 'Mobile Number', icon: 'phone', navigateTo: 'MobileNumberPage' },
     { name: 'To Bank/UPI ID', icon: 'account-balance' },
     { name: 'QR', icon: 'qr-code' },
     { name: 'Bank Balance', icon: 'account-balance-wallet' },
@@ -31,31 +32,33 @@ const PaymentPage = () => {
     { name: 'Fastag', icon: 'traffic' },
   ];
 
+  // Handle navigation
+  const handleNavigation = (navigateTo) => {
+    if (navigateTo) {
+      navigation.navigate('Money');
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
-      {/* Header Text */}
-      <View style={styles.head}><Text style={styles.header}>Banking</Text></View>
-
-      {/* First Row with Icons and Names */}
-      <View style={styles.row}>
-        {iconsRow1.map((item, index) => (
-          <View key={index} style={styles.iconContainer}>
-            <Icon name={item.icon} size={40} color="#003366" />
-            <Text style={styles.iconText}>{item.name}</Text>
-          </View>
-        ))}
+      {/* Header Section */}
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Banking Services</Text>
       </View>
 
-      <View style={styles.horizontalLine}></View>
-
-      {/* Second to Fourth Rows with 12 Icons and Names */}
-      {[iconsRow2, iconsRow3, iconsRow4].map((row, rowIndex) => (
+      {/* Icon Rows */}
+      {[iconsRow1, iconsRow2, iconsRow3, iconsRow4].map((row, rowIndex) => (
         <View key={rowIndex} style={styles.row}>
           {row.map((item, index) => (
-            <View key={index} style={styles.iconContainer}>
-              <Icon name={item.icon} size={40} color="#003366" />
+            <TouchableOpacity
+              key={index}
+              style={styles.iconContainer}
+              onPress={() => handleNavigation(item.navigateTo)}>
+              <View style={styles.iconCircle}>
+                <Icon name={item.icon} size={30} color="#fff" />
+              </View>
               <Text style={styles.iconText}>{item.name}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       ))}
@@ -66,40 +69,55 @@ const PaymentPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#F5F7FA',
+  },
+  headerContainer: {
+    backgroundColor: '#ffcc66',
+    paddingVertical: 20,
+    alignItems: 'center',
+    elevation: 4, // For shadow on Android
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    marginBottom:20
   },
   header: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: 'black',
-    textAlign: 'center',
-    marginVertical: 20,
+    fontWeight: '700',
+    color: '#fff',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginVertical: 20,
+    marginVertical: 15,
   },
   iconContainer: {
     alignItems: 'center',
     width: (Dimensions.get('window').width - 40) / 4, // For 4 items per row
   },
+  iconCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#666633',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 3, // For shadow on Android
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
   iconText: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#333',
+    marginTop: 8,
+    fontWeight: '500',
     textAlign: 'center',
   },
-  horizontalLine: {
-    height: 1,
-    backgroundColor: '#ccc',
-    marginVertical: 10,
-  },
-  head:{
-    padding: 5,
-    backgroundColor: '#ffff66', 
-    alignItems: 'center',
-    marginBottom:15,
-  }
 });
 
 export default PaymentPage;

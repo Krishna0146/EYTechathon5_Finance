@@ -24,6 +24,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "owner": "saikrishna146",
+    "extra": {
+      "eas": {
+        "projectId": "d3811ac8-5ee9-47e6-a615-0cdec267ae1e"
+      }
     }
   }
 }

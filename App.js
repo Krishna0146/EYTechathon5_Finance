@@ -1,4 +1,5 @@
 import React from "react";
+import { StatusBar } from 'react-native';
 import i18n from './i18n';
 import { I18nextProvider } from 'react-i18next';
 import { NavigationContainer } from "@react-navigation/native";
@@ -25,6 +26,8 @@ import SignUpPage from "./Screens/Signup";
 import CommunityPage from "./Screens/Community";
 import FinancialHealthScore from "./Screens/HealthScore";
 import LangTrans from "./Screens/LanguageTrans";
+import Notify from "./Screens/PushNotify";
+import Pay from "./Screens/Payment";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +35,7 @@ function App() {
   return (
     <I18nextProvider i18n={i18n}>
       <NavigationContainer>
+      <StatusBar barStyle="dark-content" hidden={false} />
         <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Splash" component={SplashScreen} />
           <Stack.Screen name="Home" component={HomePage}/>
@@ -55,6 +59,8 @@ function App() {
           <Stack.Screen name="Signup" component={SignUpPage} />
           <Stack.Screen name="Community" component={CommunityPage} />
           <Stack.Screen name="FHealthS" component={FinancialHealthScore} />
+          <Stack.Screen name="Notify" component={Notify} />
+          <Stack.Screen name="Money" component={Pay} />
         </Stack.Navigator>
       </NavigationContainer>
       </I18nextProvider>
