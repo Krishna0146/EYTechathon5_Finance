@@ -57,7 +57,7 @@ const VPort = () => {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
         <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Your Portfolio</Text>
         <Pressable style={{ backgroundColor: '#3498db', padding: 10, borderRadius: 10 }}>
-          <Text style={{ color: '#fff' }}>New+</Text>
+          <Text style={{ color: '#fff' }}>News</Text>
         </Pressable>
       </View>
 
