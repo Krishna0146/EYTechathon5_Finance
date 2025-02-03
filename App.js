@@ -6,28 +6,35 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SplashScreen from "./Screens/SplashScreen";
 import HomePage from "./Screens/Home";
-import LearnPage from "./Screens/Learn";
-import { VideoDetails } from "./Screens/VideoDetails";
+import LearnPage from "./Screens/LearnStream/Learn";
 import MultiStageForm from "./Screens/PersonalData";
-import MultiStageForm2 from "./Screens/PickWords";
-import QuizPage from "./Screens/Iquiz";
-import Stage3 from "./Screens/SkipQuiz";
-import SQuizPage from "./Screens/StartQuiz";
-import ChatScreen from "./Screens/BankScenario";
-import VPort from "./Screens/VirtualPortfolio";
-import FinTools from "./Screens/Financial";
+import SQuizPage from "./Screens/LearnStream/StartQuiz";
+import FinTools from "./Screens/FinancialCal/Financial";
 import News from "./Screens/News";
-import InvestmentPage from "./Screens/Invest";
 import ExpenseTracker from "./Screens/ExpenseTracker";
-import ChatPage from "./Screens/AIMentor";
-import PaymentScreen from "./Screens/Ruzopay";
 import LoginPage from "./Screens/Login";
 import SignUpPage from "./Screens/Signup";
-import CommunityPage from "./Screens/Community";
 import FinancialHealthScore from "./Screens/HealthScore";
-import LangTrans from "./Screens/LanguageTrans";
 import Notify from "./Screens/PushNotify";
-import Pay from "./Screens/Payment";
+import ChatScreen from "./Screens/ChatBot";
+import UserDashboard from "./Screens/LearnStream/MLearn";
+import ScenarioDetail from "./Screens/LearnStream/ModuleDetail";
+import Conversation from "./Screens/RealWorldStimulate/RealWorldS";
+import PortfolioDetails from "./Screens/VirtualPortfolio/portfoliodetails";
+import PortfolioScreen from "./Screens/VirtualPortfolio/virtualportfolio";
+import Portfolio from "./Screens/VirtualPortfolio/portfolios";
+import SearchBar from "./Screens/VirtualPortfolio/searchbar";
+import ScenarioList from "./Screens/RealWorldStimulate/MainReal";
+import BPortfolioScreen from "./Screens/portfoliobuilder/portfoliobuilder";
+import HDFCBANKEquity from "./Screens/portfoliobuilder/hdfcequity";
+import RecordSaleScreen from "./Screens/portfoliobuilder/RecordaSaleScreen";
+import InvestmentScreen from "./Screens/portfoliobuilder/investments";
+import DetailScreen from "./Screens/portfoliobuilder/DetailScreen";
+import CompoundInterestCalculator from "./Screens/FinancialCal/CompoundInt";
+import Sectors from "./Screens/RealWorldStimulate/Sector";
+import LoanEMICalculator from "./Screens/FinancialCal/LoanEMIcal";
+import ModuleDetailScreen from "./Screens/LearnStream/ModuleDetail";
+import ChatSearchScreen from "./Screens/SearchBot";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,27 +47,33 @@ function App() {
           <Stack.Screen name="Splash" component={SplashScreen} />
           <Stack.Screen name="Home" component={HomePage}/>
           <Stack.Screen name="Learn" component={LearnPage} />
-          <Stack.Screen name="Video" component={VideoDetails} />
           <Stack.Screen name="PersonData" component={MultiStageForm} />
-          <Stack.Screen name="Pick" component={MultiStageForm2} />
-          <Stack.Screen name="IQuiz" component={QuizPage} />
-          <Stack.Screen name="SQuiz" component={Stage3} />
           <Stack.Screen name="STQuiz" component={SQuizPage} />
-          <Stack.Screen name="BankScene" component={ChatScreen} />
-          <Stack.Screen name="VPort" component={VPort} />
           <Stack.Screen name="FTools" component={FinTools} />
           <Stack.Screen name="SNews" component={News} />
-          <Stack.Screen name="Langtran" component={LangTrans} />
-          <Stack.Screen name="Invest" component={InvestmentPage} />
+          <Stack.Screen name="Sector" component={Sectors} />
+          <Stack.Screen name="modulescreen" component={ModuleDetailScreen} />
           <Stack.Screen name="Expense" component={ExpenseTracker} />
-          <Stack.Screen name="AImen" component={ChatPage} />
-          <Stack.Screen name="Pay" component={PaymentScreen} />
           <Stack.Screen name="Login" component={LoginPage} />
           <Stack.Screen name="Signup" component={SignUpPage} />
-          <Stack.Screen name="Community" component={CommunityPage} />
           <Stack.Screen name="FHealthS" component={FinancialHealthScore} />
           <Stack.Screen name="Notify" component={Notify} />
-          <Stack.Screen name="Money" component={Pay} />
+          <Stack.Screen name="mreal" component={ScenarioList} />
+          <Stack.Screen name="chat" component={ChatScreen} />
+          <Stack.Screen name="userlearn" component={UserDashboard} />
+          <Stack.Screen name="conversation" component={Conversation} />
+          <Stack.Screen name="real" component={ScenarioDetail} />
+          <Stack.Screen name="compound" component={CompoundInterestCalculator} />
+          <Stack.Screen name="VirtualPortfolio" component={PortfolioScreen}/>
+          <Stack.Screen name="portfolios" component={Portfolio} />
+          <Stack.Screen name="portfoliodetails" component={PortfolioDetails} />
+          <Stack.Screen name="Portfolio" component={BPortfolioScreen}/>
+        <Stack.Screen name="HDFC Bank Ltd" component={HDFCBANKEquity} />
+        <Stack.Screen name="Record a sale" component={RecordSaleScreen} />
+        <Stack.Screen name="Investments" component={InvestmentScreen} />
+        <Stack.Screen name="Add Shares of RELIANCE" component={DetailScreen} />
+        <Stack.Screen name="searchbot" component={ChatSearchScreen} />
+        <Stack.Screen name="loanemical" component={LoanEMICalculator} />
         </Stack.Navigator>
       </NavigationContainer>
       </I18nextProvider>

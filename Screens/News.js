@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 24,
     fontWeight: 'bold',
+    fontFamily:"monospace"
   },
   tabContainer: {
     flexDirection: 'row',
@@ -148,14 +149,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
+    fontFamily:"monospace"
   },
   description: {
     fontSize: 14,
     marginBottom: 5,
+    fontFamily:"monospace"
   },
   date: {
     fontSize: 12,
     color: '#777',
+    fontFamily:"monospace"
   },
 });
 

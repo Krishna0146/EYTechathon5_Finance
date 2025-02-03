@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 20,
+    fontFamily:"monospace"
   },
   questionBox: {
     backgroundColor: '#fff',
@@ -120,10 +121,12 @@ const styles = StyleSheet.create({
   topic: {
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily:"monospace"
   },
   question: {
     fontSize: 18,
     marginVertical: 10,
+    fontFamily:"monospace"
   },
   optionBox: {
     marginVertical: 5,
@@ -140,11 +143,13 @@ const styles = StyleSheet.create({
   },
   selectedOption: {
     backgroundColor: '#28a745',
+    fontFamily:"monospace"
   },
   optionText: {
     color: '#fff',
     textAlign: 'center',
     fontSize: 16,
+    fontFamily:"monospace"
   },
 });
 

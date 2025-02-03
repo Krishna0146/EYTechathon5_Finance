@@ -3,35 +3,38 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, ImageBackg
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
+import { useRoute } from '@react-navigation/native';
 
 const HomePage = () => {
   const navigate = useNavigation();
+  const route = useRoute(); // Get the current route
+  const { username } = route.params; // Extract username from the route params
+  
   const { t } = useTranslation();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Box1 - Header Section */}
       <ImageBackground 
-        source={{ uri: 'https://img.freepik.com/free-vector/digital-rupee-technology-background-design_1017-36659.jpg' }}  // Replace with your image URL
-        style={styles.box1}
-        imageStyle={styles.box1Image}
-      >
-          <View style={styles.profileContainer}>
-          <Image source={{ uri: 'https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png' }} style={styles.profilePic} />
-          <View style={styles.profileTextContainer}>
-            <Text style={styles.greeting}>Hello</Text>
-            <Text style={styles.userName}>John Doe</Text>
-          </View>
-        </View>
-        </ImageBackground> 
-
+  source={{ uri: 'https://img.freepik.com/free-vector/digital-rupee-technology-background-design_1017-36659.jpg' }} 
+  style={styles.box1}
+  imageStyle={styles.box1Image}
+>
+  <TouchableOpacity style={styles.profileContainer} onPress={() => navigate.navigate('Portfolio')}>
+    <Image source={{ uri: 'https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png' }} style={styles.profilePic} />
+    <View style={styles.profileTextContainer}>
+      <Text style={styles.greeting}>Hello</Text>
+      <Text style={styles.userName}>{username}</Text>
+    </View>
+  </TouchableOpacity>
+</ImageBackground> 
       {/* Box2 - Content Section (8 Rectangular Boxes) */}
       <View style={styles.box2}>
         {/** Rows for different features */}
         <View style={styles.row}>
           <TouchableOpacity
             style={styles.box}
-            onPress={() => navigate.push('Learn')}>
+            onPress={() => navigate.push('userlearn')}>
             <ImageBackground
               source={{ uri: 'https://f.fseo88.com/Template/Common/Image/watermark_20241216_63_w1.jpg' }}
               style={styles.backgroundImage}
@@ -42,32 +45,7 @@ const HomePage = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.box}
-            onPress={() => navigate.push('Pay')}>
-            <ImageBackground
-              source={{ uri: 'https://happay.com/blog/wp-content/uploads/sites/12/2022/09/baas-banking-as-a-service-.png' }}
-              style={styles.backgroundImage}
-              imageStyle={styles.imageStyle}>
-              <Icon name="wallet" size={30} color="white" style={styles.icon} />
-              <Text style={styles.boxName}>{t('Banking')}</Text>
-            </ImageBackground>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableOpacity
-            style={styles.box}
-            onPress={() => navigate.push('AImen')}>
-            <ImageBackground
-              source={{ uri: 'https://media.licdn.com/dms/image/v2/D5612AQHWceLixAqd3Q/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1698760145207?e=2147483647&v=beta&t=TV2fLr1YTHhG7BQ5rJwnZc6eua1npAELopp483SY39U' }}
-              style={styles.backgroundImage}
-              imageStyle={styles.imageStyle}>
-              <Icon name="person" size={30} color="white" style={styles.icon} />
-              <Text style={styles.boxName}>AI Mentor</Text>
-            </ImageBackground>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.box}
-            onPress={() => navigate.push('VPort')}>
+            onPress={() => navigate.push('VirtualPortfolio')}>
             <ImageBackground
               source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGt2NB9wJaM_s70MHfMLRPyxUVSbR-PQLWpQ&s' }}
               style={styles.backgroundImage}
@@ -76,6 +54,30 @@ const HomePage = () => {
               <Text style={styles.boxName}>{t('Virtual Portfolio')}</Text>
             </ImageBackground>
           </TouchableOpacity>
+        </View>
+        <View style={styles.row}>
+          <TouchableOpacity
+            style={styles.box}
+            onPress={() => navigate.push('chat')}>
+            <ImageBackground
+              source={{ uri: 'https://media.licdn.com/dms/image/v2/D5612AQHWceLixAqd3Q/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1698760145207?e=2147483647&v=beta&t=TV2fLr1YTHhG7BQ5rJwnZc6eua1npAELopp483SY39U' }}
+              style={styles.backgroundImage}
+              imageStyle={styles.imageStyle}>
+              <Icon name="person" size={30} color="white" style={styles.icon} />
+              <Text style={styles.boxName}>Financial Chatbot</Text>
+            </ImageBackground>
+          </TouchableOpacity>
+          <TouchableOpacity
+          style={styles.box}
+          onPress={() => navigate.push('FHealthS')}>
+          <ImageBackground
+            source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzw4dwkJbDXJqTP9O0FOAVCkzOY3OLMENfUA&s' }}
+            style={styles.backgroundImage}
+            imageStyle={styles.imageStyle}>
+            <Icon name="stats-chart" size={30} color="white" style={styles.icon} />
+            <Text style={styles.boxName}>{t('Financial HealthScore')}</Text>
+          </ImageBackground>
+        </TouchableOpacity>
         </View>
         <View style={styles.row}>
         <TouchableOpacity
@@ -91,28 +93,18 @@ const HomePage = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.box}
-          onPress={() => navigate.push('Invest')}>
+          onPress={() => navigate.push('mreal')}>
           <ImageBackground
             source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBLozok7TMNauxEK8yNVaknHCa6T_vgs2Agg&s' }}
             style={styles.backgroundImage}
             imageStyle={styles.imageStyle}>
             <Icon name="trending-up" size={30} color="white" style={styles.icon} />
-            <Text style={styles.boxName}>{t('Invest')}</Text>
+            <Text style={styles.boxName}>{t('Real World Stimulation')}</Text>
           </ImageBackground>
         </TouchableOpacity>
         </View>
         <View style={styles.row}>
-          <TouchableOpacity
-            style={styles.box}
-            onPress={() => navigate.push('Expense')}>
-            <ImageBackground
-              source={{ uri: 'https://m.media-amazon.com/images/I/61JfO8-6-FL._AC_UF1000,1000_QL80_.jpg' }}
-              style={styles.backgroundImage}
-              imageStyle={styles.imageStyle}>
-              <Icon name="arrow-down-circle" size={30} color="white" style={styles.icon} />
-              <Text style={styles.boxName}>{t('Expense Tracker')}</Text>
-            </ImageBackground>
-          </TouchableOpacity>
+         
           <TouchableOpacity
             style={styles.box}
             onPress={() => navigate.push('SNews')}>
@@ -124,30 +116,6 @@ const HomePage = () => {
               <Text style={styles.boxName}>{t('News')}</Text>
             </ImageBackground>
           </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.box}
-          onPress={() => navigate.push('FHealthS')}>
-          <ImageBackground
-            source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzw4dwkJbDXJqTP9O0FOAVCkzOY3OLMENfUA&s' }}
-            style={styles.backgroundImage}
-            imageStyle={styles.imageStyle}>
-            <Icon name="stats-chart" size={30} color="white" style={styles.icon} />
-            <Text style={styles.boxName}>{t('Financial HealthScore')}</Text>
-          </ImageBackground>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.box}
-          onPress={() => navigate.push('Community')}>
-          <ImageBackground
-            source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBFn-xH3pfCbx17mlKcsKJcfnvHOF9ZcUYgQ&s' }}
-            style={styles.backgroundImage}
-            imageStyle={styles.imageStyle}>
-            <Icon name="stats-chart" size={30} color="white" style={styles.icon} />
-            <Text style={styles.boxName}>{t('Community')}</Text>
-          </ImageBackground>
-        </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -168,7 +136,9 @@ const styles = StyleSheet.create({
   },
   box1Image: {
     opacity: 0.8, // You can adjust the opacity if needed for better text visibility
-    borderRadius: 16,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+
   },
   profileContainer: {
     alignItems: 'flex-start', // Align to the left
@@ -181,14 +151,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   greeting: {
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 'bold',
     color: 'white',
+    fontFamily:"monospace"
   },
   userName: {
-    fontSize: 25,
+    fontSize: 28,
     fontWeight: 'bold',
     color: 'white',
+    fontFamily:"monospace"
   },
   box2: {
     padding: 20,
@@ -224,6 +196,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', // Makes the text thick
     color: 'black', // Black text
     textAlign: 'center',
+    fontFamily:"monospace"
   },
 });
 

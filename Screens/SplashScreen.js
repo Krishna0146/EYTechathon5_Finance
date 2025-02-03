@@ -20,10 +20,9 @@ export default function SplashScreen() {
     // Animate opacity and scale
     opacity.value = withTiming(1, { duration: 2000, easing: Easing.ease });
     scale.value = withTiming(1, { duration: 2000, easing: Easing.out(Easing.exp) });
-
     // Navigate to the next screen after 3 seconds
     const timeout = setTimeout(() => {
-      navigation.replace("Langtran"); // Replace "Home" with your next screen's name
+      navigation.replace("Login"); // Replace "Home" with your next screen's name
     }, 3000);
 
     return () => clearTimeout(timeout);
@@ -65,6 +64,7 @@ export default function SplashScreen() {
               fontWeight: "bold", // Bold text
               color: "#333", // Text color
               textAlign: "center", // Center align
+              fontFamily:"monospace"
             }}
           >
             Learn Finance

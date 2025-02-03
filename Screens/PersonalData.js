@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    fontFamily:"monospace"
   },
   formContainer: {
     flexGrow: 1,
@@ -173,11 +174,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
     color: '#333',
+    fontFamily:"monospace"
   },
   label: {
     fontSize: 16,
     marginBottom: 5,
     color: '#555',
+    fontFamily:"monospace"
   },
   input: {
     borderWidth: 1,
@@ -201,6 +204,7 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
     backgroundColor: '#f9f9f9',
+    fontFamily:"monospace"
   },
   buttonContainer: {
     marginBottom: 10,
@@ -220,16 +224,19 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     color: '#000',
+    fontFamily:"monospace"
   },
   finalText: {
     textAlign: 'center',
     fontSize: 18,
     color: '#4caf50',
+    fontFamily:"monospace"
   },
   errorText: {
     color: 'red',
     fontSize: 12,
     marginBottom: 10,
+    fontFamily:"monospace"
   },
 });
 
