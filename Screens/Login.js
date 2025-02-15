@@ -5,6 +5,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios'; // Import Axios
 import api from './api';
+import LottieView from "lottie-react-native";
+import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -14,6 +16,14 @@ export default function LoginPage() {
   const [otpGenerated, setOtpGenerated] = useState(false); // Show OTP field after generating
   const [isResetPassword, setIsResetPassword] = useState(false); // Toggle for reset password
   const navigation = useNavigation();
+
+  const CELL_COUNT = 6; // Number of OTP digits
+
+  const ref = useBlurOnFulfill({ value: otp, cellCount: CELL_COUNT });
+  const [propsOtp, getCellOnLayoutHandler] = useClearByFocusCell({
+    value: otp,
+    setValue: setOtp,
+  });
 
   // Step 1: Generate OTP for login or reset password
   const handleGenerateOtp = async () => {
@@ -107,7 +117,14 @@ export default function LoginPage() {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../assets/loginr.png')} style={styles.loginImage} />
+      <View style={styles.animationContainer}>
+        <LottieView 
+          source={require("../assets/animations/Animation - 1739111906766.json")} 
+          autoPlay 
+          loop 
+          style={{ width: 200, height: 200 }} 
+        />
+          </View>
       <TextInput 
         style={styles.input} placeholder="Email" keyboardType="email-address" 
         onChangeText={setEmail} value={email}
@@ -127,9 +144,25 @@ export default function LoginPage() {
           ) : (
             <View style={styles.otpContainer}>
               {/* OTP Input Field */}
-              <TextInput 
-                style={styles.otpInput} placeholder="Enter OTP" keyboardType="numeric" 
-                onChangeText={setOtp} value={otp}
+              <CodeField
+                ref={ref}
+                {...propsOtp}
+                value={otp}
+                onChangeText={setOtp}
+                cellCount={CELL_COUNT}
+                rootStyle={styles.codeFieldRoot}
+                keyboardType="number-pad"
+                textContentType="oneTimeCode"
+                renderCell={({ index, symbol, isFocused }) => (
+                  <View
+                    key={index}
+                    style={[styles.cell, isFocused && styles.focusCell]}
+                    onLayout={getCellOnLayoutHandler(index)}>
+                    <Text style={styles.cellText}>
+                      {symbol || (isFocused ? <Cursor /> : null)}
+                    </Text>
+                  </View>
+                )}
               />
                {/* Submit OTP Button */}
               <TouchableOpacity style={styles.otpButton} onPress={handleLogin}>
@@ -152,9 +185,25 @@ export default function LoginPage() {
           ) : (
             <View style={styles.otpContainer}>
               {/* OTP Input Field */}
-              <TextInput 
-                style={styles.otpInput} placeholder="Enter OTP" keyboardType="numeric" 
-                onChangeText={setOtp} value={otp}
+              <CodeField
+                ref={ref}
+                {...propsOtp}
+                value={otp}
+                onChangeText={setOtp}
+                cellCount={CELL_COUNT}
+                rootStyle={styles.codeFieldRoot}
+                keyboardType="number-pad"
+                textContentType="oneTimeCode"
+                renderCell={({ index, symbol, isFocused }) => (
+                  <View
+                    key={index}
+                    style={[styles.cell, isFocused && styles.focusCell]}
+                    onLayout={getCellOnLayoutHandler(index)}>
+                    <Text style={styles.cellText}>
+                      {symbol || (isFocused ? <Cursor /> : null)}
+                    </Text>
+                  </View>
+                )}
               />
                {/* Submit OTP Button */}
               <TouchableOpacity style={styles.otpButton} onPress={handleResetPassword}>
@@ -181,9 +230,8 @@ export default function LoginPage() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f8f8f8', padding: 20 },
-  loginImage: { width: 250, height: 300, marginBottom: 1, resizeMode: 'contain', transform: [{ rotate: '7deg' }] },
   input: { width: '100%', height: 50, backgroundColor: '#fff', borderRadius: 8, paddingHorizontal: 15, marginBottom: 20, borderWidth: 1, borderColor: '#ccc', fontFamily: "monospace" },
-  button: { width: '100%', height: 50, backgroundColor: '#3399ff', borderRadius: 8, justifyContent: 'center', alignItems: 'center', marginBottom: 15 },
+  button: { width: '100%', height: 50, backgroundColor: '#3399ff', borderRadius: 8, justifyContent: 'center', alignItems: 'center', marginBottom:15 },
   buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold', fontFamily: "monospace" },
   otpContainer: { flexDirection: 'row', width: '100%', marginBottom: 15 },
   otpInput: { 
@@ -203,10 +251,45 @@ const styles = StyleSheet.create({
     borderRadius: 8, 
     justifyContent: 'center', 
     alignItems: 'center', 
-    marginLeft: 10 
+    marginLeft: -19 
   },
+  animationContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 200,
+    height: 200, // Set a fixed size
+},
   link: { color: '#007BFF', fontSize: 16, marginTop: 10, fontFamily: "monospace" },
   signUpContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 20 },
   normalText: { fontSize: 16, color: '#555', fontFamily: "monospace" },
   signUpLink: { fontSize: 16, color: '#007BFF', textDecorationLine: 'underline', fontFamily: "monospace" },
+  codeFieldRoot: {
+    width: '80%',
+    marginBottom: 10,
+    alignSelf: 'center',
+    paddingRight:22
+  },
+  cell: {
+    width: 35,
+    height: 50,
+    lineHeight: 48,
+    fontSize: 20,
+    marginHorizontal: 1,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    textAlign: 'center',
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  focusCell: {
+    borderColor: '#3399ff',
+  },
+  cellText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    fontFamily:"monospace"
+  },
 });

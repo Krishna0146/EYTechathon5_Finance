@@ -64,11 +64,6 @@ const RecordSaleScreen = () => {
         </View>
       </View>
 
-      <View style={styles.switchContainer}>
-        <Switch value={recordAsSold} onValueChange={setRecordAsSold} />
-        <Text style={styles.label}>Record 1 share as sold</Text>
-      </View>
-
       <View style={styles.inputContainer}>
         <Text style={styles.label}>No. of shares sold</Text>
         <View style={styles.sharesSoldContainer}>
@@ -82,7 +77,6 @@ const RecordSaleScreen = () => {
             <Text style={styles.button}>+</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.sharesAvailable}>1 of 1</Text>
       </View>
 
       <View style={styles.buttonContainer}>
@@ -156,11 +150,6 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 5,
     padding: 10,
-  },
-  switchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
   },
   sharesSoldContainer: {
     flexDirection: "row",

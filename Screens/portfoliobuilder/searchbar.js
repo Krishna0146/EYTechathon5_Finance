@@ -15,7 +15,7 @@ const SearchBar = ({ placeholder, searchTerm, setSearchTerm, onAddPress }) => {
     <View style={styles.searchBarContainer}>
       <Ionicons
         name="search"
-        size={20}
+        size={25}
         color="gray"
         style={styles.searchIcon}
       />
@@ -51,11 +51,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     paddingLeft: 10,
+    fontFamily:"monospace"
   },
   addButton: {
     backgroundColor: "#2196F3",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
     borderRadius: 8,
     marginLeft: 10,
   },
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 14,
     fontWeight: "bold",
+    fontFamily:"monospace"
   },
 });
 

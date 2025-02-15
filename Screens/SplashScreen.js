@@ -1,76 +1,55 @@
-import React, { useEffect } from "react";
-import { View, Image, Text } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  Easing,
-} from "react-native-reanimated";
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import LottieView from "lottie-react-native";
 
-export default function SplashScreen() {
-  const navigation = useNavigation();
-
-  // Animation setup
-  const opacity = useSharedValue(0);
-  const scale = useSharedValue(0.5);
-
-  useEffect(() => {
-    // Animate opacity and scale
-    opacity.value = withTiming(1, { duration: 2000, easing: Easing.ease });
-    scale.value = withTiming(1, { duration: 2000, easing: Easing.out(Easing.exp) });
-    // Navigate to the next screen after 3 seconds
-    const timeout = setTimeout(() => {
-      navigation.replace("Login"); // Replace "Home" with your next screen's name
-    }, 3000);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
-  // Animated styles
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    transform: [{ scale: scale.value }],
-  }));
-
+const SplashScreen = ({ navigation }) => {
   return (
-    <LinearGradient
-      colors={["#ffffff", "#ffff66"]} // Matches your desired gradient
-      style={{ flex: 1 }}
-      start={{ x: 0, y: 1 }} // Start from the bottom
-      end={{ x: 0, y: 0 }}   // End at the top
-    >
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Animated.View style={animatedStyle}>
-          <Image
-            source={require("../assets/Logos.png")} // Replace with your image path
-            style={{
-              width: 300,
-              height: 300,
-              resizeMode: "contain",
-            }}
-          />
-          <Text
-            style={{
-              marginTop: 0, // Space between the logo and text
-              fontSize: 24, // Adjust font size
-              fontWeight: "bold", // Bold text
-              color: "#333", // Text color
-              textAlign: "center", // Center align
-              fontFamily:"monospace"
-            }}
-          >
-            Learn Finance
-          </Text>
-        </Animated.View>
+    <View style={styles.container}>
+      <View style={styles.innerContainer}>
+        <LottieView
+          source={require("../assets/animations/stocks.json")} // Your Lottie file
+          autoPlay
+          loop
+          style={styles.animation}
+        />
+        <Text style={styles.title}>GenAI Financial Assistant</Text>
+        <Text style={styles.subtitle}>
+          Smarter investing, personalized for you.
+        </Text>
       </View>
-    </LinearGradient>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Signup")}
+        >
+          <Text style={styles.buttonText}>GET STARTED</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.secondaryButton}
+          onPress={() => navigation.navigate("Login")}
+        >
+          <Text style={styles.secondaryButtonText}>
+            I ALREADY HAVE AN ACCOUNT
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: "space-between", padding: 24, backgroundColor: "white" },
+  innerContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+  animation: { width: 200, height: 200,}, // Adjust size as needed
+  title: { fontSize: 22, fontWeight: "bold", textAlign: "center", color: "#3A3A3A", marginBottom: 5,fontFamily:"monospace" },
+  subtitle: { fontSize: 16, color: "#7f8c8d", textAlign: "center", marginBottom: 30,fontFamily:"monospace" },
+  buttonContainer: { paddingBottom: 20 },
+  button: { backgroundColor: "#2E4A3D", paddingVertical: 14, borderRadius: 10, alignItems: "center", marginBottom: 15 },
+  buttonText: { color: "white", fontSize: 16, fontWeight: "bold",fontFamily:"monospace" },
+  secondaryButton: { paddingVertical: 14, borderRadius: 10, borderWidth: 1, borderColor: "#2E4A3D", alignItems: "center" },
+  secondaryButtonText: { color: "#2E4A3D", fontSize: 16, fontWeight: "bold",fontFamily:"monospace" },
+});
+
+export default SplashScreen;

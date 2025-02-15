@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-const API_URL = "http://192.168.0.187:9000"; // Change if hosted
+const API_URL = "http://192.168.0.189:9000"; // Change if hosted
 
 export default function ChatScreen() {
   const [chatInput, setChatInput] = useState("");

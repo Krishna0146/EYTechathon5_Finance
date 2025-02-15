@@ -7,84 +7,109 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native"; // Import useNavigation
+import { useNavigation } from "@react-navigation/native"; 
+import axios from "axios"; 
+import api from "../api";
+import { useRoute } from '@react-navigation/native';
 
 const InvestmentScreen = () => {
   const [investments, setInvestments] = useState([]);
   const [filteredInvestments, setFilteredInvestments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigation = useNavigation(); // Initialize navigation
+  const navigation = useNavigation(); 
+  const route = useRoute();
+  const { username,asset } = route.params || {};
 
   useEffect(() => {
     const fetchInvestments = async () => {
       try {
-        const response = await fetch(
-          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false"
-        );
-        const data = await response.json();
-        setInvestments(data);
-        setFilteredInvestments(data); // Set filtered investments to the full list initially
+        const response = await axios.get(`${api}/api/stocks/getallstocks`);
+        const updatedData = response.data.map((item) => ({
+          ...item,
+          ticker: item.ticker ? item.ticker.replace(".NS", "") : "N/A",
+          price: item.price ?? 100, 
+          price_change_percentage_24h: item.price_change_percentage_24h ?? 0, 
+        }));
+        setInvestments(updatedData);
+        setFilteredInvestments(updatedData);
       } catch (error) {
         console.error(error);
       }
     };
-
-    fetchInvestments();
-  }, []);
-
+  
+    fetchInvestments(); // Initial fetch
+  
+    // Fetch data every 2 seconds
+    const interval = setInterval(fetchInvestments, 1000);
+  
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, []);  
+  
   const handleSearch = (text) => {
     setSearchTerm(text);
     if (text) {
       const filteredData = investments.filter(
         (item) =>
-          item.name.toLowerCase().includes(text.toLowerCase()) ||
-          item.symbol.toLowerCase().includes(text.toLowerCase())
+          item.stock_name?.toLowerCase().includes(text.toLowerCase()) ||
+          item.ticker?.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredInvestments(filteredData);
     } else {
-      setFilteredInvestments(investments); // If search term is empty, show all
+      setFilteredInvestments(investments);
     }
   };
 
-  const handleItemPress = () => {
-    navigation.navigate("Add Shares of RELIANCE"); // Navigate to the DetailScreen
-  };
+  const handleItemPress = (item) => {
+    navigation.navigate("DetailScreen", {
+      username:username,
+      asset:asset,
+      stockName: item.stock_name || "Unnamed Stock",
+      ticker: item.ticker || "N/A",
+      price: Number(item.price ?? 0), // Ensure it's a number
+      priceChange: Number(item.price_change_percentage_24h ?? 0),  
+    });
+  };  
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.listItem} onPress={handleItemPress}>
+    <TouchableOpacity 
+      style={styles.listItem} 
+      onPress={() => handleItemPress(item)}
+    >
       <View style={styles.leftContainer}>
-        <Text style={styles.symbol}>{item.symbol.toUpperCase()}</Text>
-        <Text style={styles.name}>{item.name}</Text>
+        <Text style={styles.symbol}>
+          {item.ticker ? item.ticker.toUpperCase() : "N/A"}
+        </Text>
+        <Text style={styles.name}>{item.stock_name || "Unnamed Stock"}</Text>
       </View>
       <View style={styles.rightContainer}>
-        <Text style={styles.price}>${item.current_price.toFixed(2)}</Text>
-        {item.price_change_percentage_24h > 0 ? (
-          <Text style={[styles.change, styles.positive]}>
-            +{item.price_change_percentage_24h.toFixed(2)}%
-          </Text>
-        ) : (
-          <Text style={[styles.change, styles.negative]}>
-            {item.price_change_percentage_24h.toFixed(2)}%
-          </Text>
-        )}
+        <Text style={styles.price}>₹{(item.price ?? 0).toFixed(2)}</Text>
+        <Text
+          style={[
+            styles.change,
+            (item.price_change_percentage_24h ?? 0) > 0
+              ? styles.positive
+              : styles.negative,
+          ]}
+        >
+          {(item.price_change_percentage_24h ?? 0) > 0 ? "+" : ""}
+          {(item.price_change_percentage_24h ?? 0).toFixed(2)}%
+        </Text>
       </View>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      {/* Search Bar */}
       <TextInput
         style={styles.searchBar}
         placeholder="Search by name or symbol"
         value={searchTerm}
         onChangeText={handleSearch}
       />
-
       <FlatList
         data={filteredInvestments}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.stock_id?.toString() ?? Math.random().toString()}
       />
     </View>
   );

@@ -23,10 +23,9 @@ import Conversation from "./Screens/RealWorldStimulate/RealWorldS";
 import PortfolioDetails from "./Screens/VirtualPortfolio/portfoliodetails";
 import PortfolioScreen from "./Screens/VirtualPortfolio/virtualportfolio";
 import Portfolio from "./Screens/VirtualPortfolio/portfolios";
-import SearchBar from "./Screens/VirtualPortfolio/searchbar";
 import ScenarioList from "./Screens/RealWorldStimulate/MainReal";
 import BPortfolioScreen from "./Screens/portfoliobuilder/portfoliobuilder";
-import HDFCBANKEquity from "./Screens/portfoliobuilder/hdfcequity";
+import EachHold from "./Screens/portfoliobuilder/EachHold";
 import RecordSaleScreen from "./Screens/portfoliobuilder/RecordaSaleScreen";
 import InvestmentScreen from "./Screens/portfoliobuilder/investments";
 import DetailScreen from "./Screens/portfoliobuilder/DetailScreen";
@@ -68,12 +67,12 @@ function App() {
           <Stack.Screen name="portfolios" component={Portfolio} />
           <Stack.Screen name="portfoliodetails" component={PortfolioDetails} />
           <Stack.Screen name="Portfolio" component={BPortfolioScreen}/>
-        <Stack.Screen name="HDFC Bank Ltd" component={HDFCBANKEquity} />
-        <Stack.Screen name="Record a sale" component={RecordSaleScreen} />
-        <Stack.Screen name="Investments" component={InvestmentScreen} />
-        <Stack.Screen name="Add Shares of RELIANCE" component={DetailScreen} />
-        <Stack.Screen name="searchbot" component={ChatSearchScreen} />
-        <Stack.Screen name="loanemical" component={LoanEMICalculator} />
+          <Stack.Screen name="EachHold" component={EachHold} />
+          <Stack.Screen name="Record a sale" component={RecordSaleScreen} />
+          <Stack.Screen name="Investments" component={InvestmentScreen} />
+          <Stack.Screen name="DetailScreen" component={DetailScreen} />
+          <Stack.Screen name="searchbot" component={ChatSearchScreen} />
+          <Stack.Screen name="loanemical" component={LoanEMICalculator} />
         </Stack.Navigator>
       </NavigationContainer>
       </I18nextProvider>
