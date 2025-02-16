@@ -125,6 +125,9 @@ export default function LoginPage() {
           style={{ width: 200, height: 200 }} 
         />
           </View>
+          <View style={styles.headerContainer}>
+            <Text style={styles.headerText}>Login</Text>
+          </View>
       <TextInput 
         style={styles.input} placeholder="Email" keyboardType="email-address" 
         onChangeText={setEmail} value={email}
@@ -291,5 +294,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     fontFamily:"monospace"
+  },
+  headerContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 20, // Space below the title
+  },
+  headerText: {
+    fontSize: 26,
+    fontWeight: 900,
+    fontFamily:"monospace",
+    color: '#333',
+    textTransform: 'uppercase', // Makes text look more professional
+    letterSpacing: 1, // Adds spacing for a refined look
   },
 });

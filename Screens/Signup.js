@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { 
-  StyleSheet, Text, View, TextInput, TouchableOpacity, Alert 
+  StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, ScrollView 
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios'; // Import Axios
-import { Picker } from '@react-native-picker/picker'; // Import Picker
+import axios from 'axios';
+import { Picker } from '@react-native-picker/picker';
+import LottieView from "lottie-react-native";
 
 export default function SignUpPage() {
   const [username, setUsername] = useState('');
@@ -25,13 +26,13 @@ export default function SignUpPage() {
     }
 
     try {
-      const response = await axios.post("http://192.168.68.119:3000/api/auth/register", { // Update backend URL if deployed
+      const response = await axios.post("http://192.168.68.119:3000/api/auth/register", {
         username, email, password, age, gender, location, occupation, education
       });
 
       Alert.alert('Registration Successful', `Welcome, ${username}!`);
       const username = response.data.user.username;
-      navigation.push('Home',{username});
+      navigation.push('Home', { username });
       
     } catch (error) {
       Alert.alert('Error', error.response?.data?.message || 'Something went wrong.');
@@ -39,56 +40,140 @@ export default function SignUpPage() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
+      <View style={styles.container}>
+        <View style={styles.animationContainer}>
+          <LottieView 
+            source={require("../assets/animations/man-thinks.json")} 
+            autoPlay 
+            loop 
+            style={{ width: 200, height: 200 }} 
+          />
+        </View>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Sign Up</Text>
+      </View>
 
-      <TextInput style={styles.input} placeholder="Username" onChangeText={setUsername} value={username} />
-      <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" onChangeText={setEmail} value={email} />
-      <TextInput style={styles.input} placeholder="Create Password" secureTextEntry onChangeText={setPassword} value={password} />
-      <TextInput style={styles.input} placeholder="Age" keyboardType="numeric" onChangeText={setAge} value={age} />
-      <TextInput style={styles.input} placeholder="Location" onChangeText={setLocation} value={location} />
-      <TextInput style={styles.input} placeholder="Occupation" onChangeText={setOccupation} value={occupation} />
+        <Text style={styles.label}>Username</Text>
+        <TextInput style={styles.input} onChangeText={setUsername} value={username} placeholder='Create Unique Username'/>
 
-      {/* Gender Dropdown */}
-      <Picker selectedValue={gender} style={styles.input} onValueChange={(itemValue) => setGender(itemValue)}>
-        <Picker.Item label="Select Gender" value="" />
-        <Picker.Item label="Male" value="male" />
-        <Picker.Item label="Female" value="female" />
-        <Picker.Item label="Others" value="others" />
-      </Picker>
+        <Text style={styles.label}>Email</Text>
+        <TextInput style={styles.input} keyboardType="email-address" onChangeText={setEmail} value={email} placeholder='Email ( in format of sample@gmail.com )'/>
 
-      {/* Education Dropdown */}
-      <Picker selectedValue={education} style={styles.input} onValueChange={(itemValue) => setEducation(itemValue)}>
-        <Picker.Item label="Select Education Level" value="" />
-        <Picker.Item label="School" value="school" />
-        <Picker.Item label="High School" value="highSchool" />
-        <Picker.Item label="Undergraduate" value="underGraduate" />
-        <Picker.Item label="Postgraduate" value="postGraduate" />
-      </Picker>
+        <Text style={styles.label}>Create Password</Text>
+        <TextInput style={styles.input} secureTextEntry onChangeText={setPassword} value={password} placeholder='Create Strong Password '/>
 
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
-    </View>
+        <Text style={styles.label}>Age</Text>
+        <TextInput style={styles.input} keyboardType="numeric" onChangeText={setAge} value={age} placeholder='Enter Your Age'/>
+
+        <Text style={styles.label}>Location</Text>
+        <TextInput style={styles.input} onChangeText={setLocation} value={location} placeholder='Permanent Address'/>
+
+        <Text style={styles.label}>Occupation</Text>
+        <TextInput style={styles.input} onChangeText={setOccupation} value={occupation} placeholder='Present Occupation'/>
+
+        <Text style={styles.label}>Gender</Text>
+        <Picker selectedValue={gender} style={styles.input} onValueChange={(itemValue) => setGender(itemValue)}>
+          <Picker.Item label="Select Gender" value="" />
+          <Picker.Item label="Male" value="male" />
+          <Picker.Item label="Female" value="female" />
+          <Picker.Item label="Others" value="others" />
+        </Picker>
+
+        <Text style={styles.label}>Education</Text>
+        <Picker selectedValue={education} style={styles.input} onValueChange={(itemValue) => setEducation(itemValue)}>
+          <Picker.Item label="Select Education Level" value="" />
+          <Picker.Item label="School" value="school" />
+          <Picker.Item label="High School" value="highSchool" />
+          <Picker.Item label="Undergraduate" value="underGraduate" />
+          <Picker.Item label="Postgraduate" value="postGraduate" />
+        </Picker>
+
+        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.loginText}>
+            Already have an account? <Text style={styles.loginLink}>Login</Text>
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f8f8f8', padding: 20,
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 30,
+    borderRadius:10,
   },
-  title: {
-    fontSize: 36, fontWeight: 'bold', marginBottom: 30, color: '#ffcc00', fontFamily: "monospace",
+  container: {
+    width: '90%', 
+    alignItems: 'center', 
+    backgroundColor: '#f8f8f8',
+    padding: 20, 
+    borderRadius: 10,
+  },
+  animationContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    alignSelf: 'flex-start',
+    marginBottom: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
   },
   input: {
-    width: '100%', height: 50, backgroundColor: '#fff', borderRadius: 8, paddingHorizontal: 15,
-    marginBottom: 15, borderWidth: 1, borderColor: '#ccc', fontFamily: "monospace",
+    width: '100%', 
+    height: 50, 
+    backgroundColor: '#fff', 
+    borderRadius: 8, 
+    paddingHorizontal: 15,
+    marginBottom: 15, 
+    borderWidth: 1, 
+    borderColor: '#ccc',
   },
   button: {
-    width: '100%', height: 50, backgroundColor: '#3399ff', borderRadius: 8, justifyContent: 'center',
-    alignItems: 'center', marginTop: 10,
+    width: '100%', 
+    height: 50, 
+    backgroundColor: '#3399ff', 
+    borderRadius: 8, 
+    justifyContent: 'center',
+    alignItems: 'center', 
+    marginTop: 10,
   },
   buttonText: {
-    color: '#fff', fontSize: 18, fontWeight: 'bold', fontFamily: "monospace",
+    color: '#fff', 
+    fontSize: 18, 
+    fontWeight: 'bold',
+  },
+  headerContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 20, // Space below the title
+  },
+  headerText: {
+    fontSize: 26,
+    fontWeight: 900,
+    fontFamily:"monospace",
+    color: '#333',
+    textTransform: 'uppercase', // Makes text look more professional
+    letterSpacing: 1, // Adds spacing for a refined look
+  },
+  loginText: {
+    marginTop: 15,
+    fontSize: 16,
+    color: '#333',
+    textAlign: 'center',
+    fontFamily:"monospace"
+  },
+  loginLink: {
+    color: '#3399ff',
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
   },
 });

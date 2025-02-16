@@ -1,166 +1,145 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  RefreshControl,
+  Linking,
+} from "react-native";
+import axios from "axios";
 
-const newsData = [
-  {
-    id: 1,
-    title: "Tech Giant Announces New AI Initiative",
-    description: "A leading technology company has announced a new initiative to integrate AI into its products. This marks a significant milestone in the tech world.",
-    image: "https://example.com/news1.jpg",  // Placeholder image URL
-    date: "2025-01-06",
-  },
-  {
-    id: 2,
-    title: "Global Stock Markets See Record Growth",
-    description: "Global stock markets have hit all-time highs, with investors optimistic about the global economic recovery after the pandemic.",
-    image: "https://example.com/news2.jpg",  // Placeholder image URL
-    date: "2025-01-05",
-  },
-  {
-    id: 3,
-    title: "New Health Research Shows Promising Results",
-    description: "New health research suggests that a new treatment could significantly reduce the risk of certain diseases.",
-    image: "https://example.com/news3.jpg",  // Placeholder image URL
-    date: "2025-01-04",
-  },
-];
-
-const scamData = [
-  {
-    id: 1,
-    title: "Fake Investment Scheme Targets Retirees",
-    description: "A new scam is circulating where scammers are pretending to offer exclusive investment opportunities, targeting retirees with promises of high returns.",
-    image: "https://example.com/scam1.jpg",  // Placeholder image URL
-    date: "2025-01-06",
-  },
-  {
-    id: 2,
-    title: "Phishing Scam Impersonates Bank Officials",
-    description: "A phishing scam is circulating where scammers impersonate bank officials and ask for personal account details. Customers are advised to verify any unsolicited communications.",
-    image: "https://example.com/scam2.jpg",  // Placeholder image URL
-    date: "2025-01-05",
-  },
-  {
-    id: 3,
-    title: "Scammers Using Fake Job Offers to Steal Information",
-    description: "A new scam involves fraudulent job offers where scammers ask for personal information and payment upfront for supposed work opportunities.",
-    image: "https://example.com/scam3.jpg",  // Placeholder image URL
-    date: "2025-01-04",
-  },
-];
+const fallbackImage = require("../assets/banking.png"); // ✅ Local fallback image
 
 const News = () => {
-  const [activeTab, setActiveTab] = useState('news'); // Default to show news
-  const { t } = useTranslation();
+  const [news, setNews] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [imageErrors, setImageErrors] = useState({});
 
-  const renderItem = ({ item }) => (
-    <View style={styles.card}>
-      <Image source={{ uri: item.image }} style={styles.image} />
-      <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.description}>{item.description}</Text>
-      <Text style={styles.date}>Date: {item.date}</Text>
-    </View>
-  );
+  const API_KEY = "5f62dc92772b4886b768842aa5142d1d";
+  const NEWS_URL = `https://newsapi.org/v2/top-headlines?category=business&apiKey=${API_KEY}`;
 
-  const handleTabPress = (tab) => {
-    setActiveTab(tab);
+  // 🔥 Fetch News (Force fresh data)
+  const fetchNews = async () => {
+    try {
+      setRefreshing(true);
+
+      // ✅ Append timestamp to URL to avoid caching
+      const response = await axios.get(`${NEWS_URL}&_=${Date.now()}`);
+
+      if (response.data.articles && response.data.articles.length > 0) {
+        // ✅ Filter valid articles
+        const filteredNews = response.data.articles.filter(
+          (article) => article.title && article.url
+        );
+        // ✅ Force state update by setting a new array reference
+        setNews([...filteredNews]);
+      } else {
+        console.warn("No valid news articles found.");
+        setNews([]); // ✅ Set empty list if no valid news
+      }
+    } catch (error) {
+      console.error("Error fetching news:", error);
+    } finally {
+      setRefreshing(false);
+    }
   };
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
+
+  // 🔄 Refresh Handler
+  const onRefresh = useCallback(() => {
+    fetchNews();
+  }, []);
+
+  // ❌ Handle Image Load Errors
+  const handleImageError = (index) => {
+    setImageErrors((prevErrors) => ({
+      ...prevErrors,
+      [index]: true,
+    }));
+  };
+
+  // 🌐 Open Full Article in Browser
+  const openArticle = (url) => {
+    if (url) {
+      Linking.openURL(url).catch((err) =>
+        console.error("Failed to open URL:", err)
+      );
+    } else {
+      alert("No URL available for this article.");
+    }
+  };
+
+  // 📰 Render News Card
+  const renderItem = ({ item, index }) => (
+    <TouchableOpacity style={styles.card} onPress={() => openArticle(item.url)}>
+      <Image
+        source={
+          imageErrors[index] || !item.urlToImage
+            ? fallbackImage
+            : { uri: item.urlToImage }
+        }
+        style={styles.image}
+        onError={() => handleImageError(index)}
+      />
+      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.description}>
+        {item.description || "No description available."}
+      </Text>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
-      {/* Top Section with News */}
-      <View style={styles.topSection}>
-        <Text style={styles.topText}>{t('News')}</Text>
-      </View>
-
-      {/* Scam Alerts and News buttons */}
-      <View style={styles.tabContainer}>
-        <TouchableOpacity onPress={() => handleTabPress('scam')}>
-          <Text style={[styles.tabButton, activeTab === 'scam' && styles.activeTab]}>
-          {t('Scam Alerts')}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleTabPress('news')}>
-          <Text style={[styles.tabButton, activeTab === 'news' && styles.activeTab]}>
-          {t('News')}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Display the respective data (News or Scam Alerts) */}
-      <FlatList
-        data={activeTab === 'news' ? newsData : scamData}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        onEndReachedThreshold={0.1}
-        onEndReached={() => console.log('Load more...')} // Example for fetching more content
-      />
+    <Text style={styles.heading}>News</Text>
+      {news.length === 0 ? (
+        <Text style={styles.noNewsText}>No news available</Text>
+      ) : (
+        <FlatList
+          data={news}
+          keyExtractor={(item, index) => `${item.url}-${index}`} // ✅ Unique keys
+          renderItem={renderItem}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          extraData={news} // ✅ Forces FlatList to re-render when data updates
+        />
+      )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  topSection: {
-    backgroundColor: '#ffff66',
-    padding: 10,
-    top: 25,
-  },
-  topText: {
-    color: 'black',
-    fontSize: 24,
-    fontWeight: 'bold',
-    fontFamily:"monospace"
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 20,
-    top: 10,
-  },
-  tabButton: {
+// 🎨 Styles
+const styles = {
+  container: { flex: 1, padding: 10, backgroundColor: "#f8f9fa" },
+  noNewsText: {
     fontSize: 18,
-    color: '#000',
-    paddingVertical: 5,
-  },
-  activeTab: {
-    color: 'blue',
-    fontWeight: 'bold',
+    textAlign: "center",
+    marginTop: 20,
+    color: "gray",
   },
   card: {
-    padding: 15,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: '#ddd',
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 5,
+    elevation: 3,
   },
-  image: {
-    width: '100%',
-    height: 200,
-    borderRadius: 8,
-    marginBottom: 10,
+  image: { width: "100%", height: 150, borderRadius: 10 },
+  title: { fontSize: 16, fontWeight: "bold", marginVertical: 5 },
+  description: { fontSize: 14, color: "gray" },
+  heading: {
+    fontSize: 24, // Larger text size for heading
+    fontWeight: "bold", // Bold text
+    textAlign: "center", // Center align
+    marginVertical: 10, // Space above and below
+    color: "#333", // Dark color for better readability
+    backgroundColor:"lightblue"
   },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    fontFamily:"monospace"
-  },
-  description: {
-    fontSize: 14,
-    marginBottom: 5,
-    fontFamily:"monospace"
-  },
-  date: {
-    fontSize: 12,
-    color: '#777',
-    fontFamily:"monospace"
-  },
-});
+};
 
 export default News;

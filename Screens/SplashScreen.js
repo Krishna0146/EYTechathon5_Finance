@@ -46,10 +46,10 @@ const styles = StyleSheet.create({
   title: { fontSize: 22, fontWeight: "bold", textAlign: "center", color: "#3A3A3A", marginBottom: 5,fontFamily:"monospace" },
   subtitle: { fontSize: 16, color: "#7f8c8d", textAlign: "center", marginBottom: 30,fontFamily:"monospace" },
   buttonContainer: { paddingBottom: 20 },
-  button: { backgroundColor: "#2E4A3D", paddingVertical: 14, borderRadius: 10, alignItems: "center", marginBottom: 15 },
+  button: { backgroundColor: "#228b22", paddingVertical: 14, borderRadius: 10, alignItems: "center", marginBottom: 15 },
   buttonText: { color: "white", fontSize: 16, fontWeight: "bold",fontFamily:"monospace" },
-  secondaryButton: { paddingVertical: 14, borderRadius: 10, borderWidth: 1, borderColor: "#2E4A3D", alignItems: "center" },
-  secondaryButtonText: { color: "#2E4A3D", fontSize: 16, fontWeight: "bold",fontFamily:"monospace" },
+  secondaryButton: { paddingVertical: 14, borderRadius: 10, borderWidth: 1, borderColor: "#228b22", alignItems: "center" },
+  secondaryButtonText: { color: "#228b22", fontSize: 16, fontWeight: "bold",fontFamily:"monospace" },
 });
 
 export default SplashScreen;

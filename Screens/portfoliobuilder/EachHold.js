@@ -7,7 +7,7 @@ import {
   ScrollView,
   Modal,
   ActivityIndicator,
-  TextInput,
+  TextInput,Alert
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
@@ -15,13 +15,17 @@ import api from "../api";
 import DateTimePickerModal from "react-native-modal-datetime-picker"; 
 
 const EachHold = ({ route }) => {
-  const { name, username } = route.params;
+  const { name, username,asset } = route.params;
+  const [sellingPrice, setSellingPrice] = useState(""); 
+  const [sellingQuantity, setSellingQuantity] = useState("");
+  const [sellingDate, setSellingDate] = useState("");
   const [purchaseHistory, setPurchaseHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [selectedMenuId, setSelectedMenuId] = useState(null); // Tracks the open menu
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isSellDatePickerVisible, setSellDatePickerVisibility] = useState(false);
 
   useEffect(() => {
     fetchPortfolioData();
@@ -37,7 +41,8 @@ const EachHold = ({ route }) => {
         quantity: holding.qty.toString(),
         value: holding.bought_price.toString(),
       }));
-
+      console.log(portfolio.holdings[0].asset);
+      console.log(portfolio.holdings[0].name);
       setPurchaseHistory(formattedData);
       setLoading(false);
     } catch (error) {
@@ -52,7 +57,32 @@ const EachHold = ({ route }) => {
     setSelectedMenuId(null); // Close menu after selecting an option
   };
 
-  const handleDelete = async (id) => {
+  const handleSell = async () => {
+    console.log("handleSell function is executing...");    
+    console.log("handel sell is ok....")
+    //✅ Validate Inputs Before API Call
+    if (!username || !asset || !name || !sellingPrice || !sellingQuantity || !sellingDate) {
+      Alert.alert("Error", "All fields are required!");
+      return;
+    }
+    try {
+      const response = await axios.post(`${api}/api/sellings/sell`, {  // ✅ Fixed API route
+        username,
+        asset,
+        name,
+        sellingPrice: Number(sellingPrice),
+        sellingQuantity: Number(sellingQuantity),
+        sellingDate,
+      });
+      Alert.alert("Success", "Sell data submitted successfully!");
+      console.log(response.data.removedStocks);
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "Failed to submit sell data.");
+    }
+  };
+    
+    const handleDelete = async (id) => {
     try {
       //console.log(`Deleting: ${api}/api/holdings/delete/${username}/${id}`);
       await axios.delete(`${api}/api/holdings/delete/${username}/${id}`);
@@ -82,7 +112,64 @@ const EachHold = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
+      {/* Sell Block */}
+      <View style={styles.sellBlock}>
+      {/* Traffic Light Icons */}
+      <View style={styles.tools}>
+        <View style={[styles.circle, styles.red]} />
+        <View style={[styles.circle, styles.yellow]} />
+        <View style={[styles.circle, styles.green]} />
+      </View>
+
+      <Text style={styles.sellHeading}>SELL</Text>
+
+      {/* Input Fields */}
+      <TextInput
+        style={styles.input}
+        placeholder="Selling Price"
+        placeholderTextColor="#aaa"
+        keyboardType="numeric"
+        value={sellingPrice}
+        onChangeText={setSellingPrice}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Selling Quantity"
+        placeholderTextColor="#aaa"
+        keyboardType="numeric"
+        value={sellingQuantity}
+        onChangeText={setSellingQuantity}
+      />
+
+      <TouchableOpacity style={styles.input} onPress={() => setSellDatePickerVisibility(true)}>
+        <Text style={styles.dateText}>{sellingDate || "Select Selling Date"}</Text>
+      </TouchableOpacity>
+
+      <DateTimePickerModal
+        isVisible={isSellDatePickerVisible}
+        mode="date"
+        onConfirm={(date) => {
+          setSellingDate(date.toDateString());
+          setSellDatePickerVisibility(false);
+        }}
+        onCancel={() => setSellDatePickerVisibility(false)}
+      />
+
+      {/* Sell Button */}
+      <TouchableOpacity
+        style={styles.sellButton}
+        onPress={() => {
+          console.log("Sell button pressed!");  // Debugging log
+          handleSell();
+        }}
+      >
+      <Text style={styles.buttonText}>Sell</Text>
+      </TouchableOpacity>
+    </View>
+      <View style={styles.headerLine} />
+      {/*header section*/}
       <View style={styles.header}>
         <Text style={styles.headerTextLeft}>PURCHASE DATE</Text>
         <Text style={styles.headerTextMiddle}>QUANTITY</Text>
@@ -182,7 +269,7 @@ const EachHold = ({ route }) => {
           </View>
         </View>
       </Modal>
-    </View>
+    </ScrollView>
   );
 };
 // **Updated Styles**
@@ -193,6 +280,72 @@ const styles = StyleSheet.create({
   headerTextMiddle: { fontSize: 14, fontWeight: "bold",fontFamily:"monospace" },
   headerTextRight: { fontSize: 14, fontWeight: "bold",fontFamily:"monospace" },
   headerLine: { height: 1, backgroundColor: "#ccc", marginBottom: 10 },
+  sellBlock: {
+    width: "100%",
+    padding: 16,
+    backgroundColor: "#272727",
+    borderRadius: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  tools: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  circle: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginHorizontal: 5,
+  },
+  red: { backgroundColor: "orange" },
+  yellow: { backgroundColor: "white" },
+  green: { backgroundColor: "#00ca4e" },
+  sellHeading: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
+    marginBottom: 10,
+    fontFamily:"monospace"
+  },
+  input: {
+    width: "100%",
+    color: "white",
+    padding: 10,
+    marginVertical: 5,
+    borderWidth: 1,
+    borderColor: "#555",
+    borderRadius: 5,
+    backgroundColor: "#333",
+    },
+  dateText: {
+    color: "#fff",
+    textAlign: "center",
+    fontFamily:"monospace"
+  },
+  sellButton: {
+    backgroundColor: "#00ca4e",
+    width: "100%",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontFamily:"monospace"
+  },
+  headerLine: {
+    height: 1,
+    backgroundColor: "#ddd",
+    marginVertical: 20,
+  },
   record: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -210,15 +363,15 @@ const styles = StyleSheet.create({
   recordValue: { fontSize: 16, marginRight: 10,fontFamily:"monospace" },  
   menuWrapper: {
     position: "absolute",
-    top: -18,
+    top: -20,
     right: 0,
-    zIndex: 1000,
+    zIndex: 100,   // Make it higher
+    elevation: 10, // Required for Android
   },
   menu: {
     backgroundColor: "#fff",
     borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingVertical: 1,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -227,8 +380,8 @@ const styles = StyleSheet.create({
     borderColor: "#E0E0E0",
   },
   menuItem: {
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
     flexDirection: "row",
     alignItems: "center",
     fontFamily:"monospace"

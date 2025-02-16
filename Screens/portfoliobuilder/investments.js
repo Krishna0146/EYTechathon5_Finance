@@ -36,12 +36,9 @@ const InvestmentScreen = () => {
         console.error(error);
       }
     };
-  
     fetchInvestments(); // Initial fetch
-  
     // Fetch data every 2 seconds
-    const interval = setInterval(fetchInvestments, 1000);
-  
+    const interval = setInterval(fetchInvestments, 6000000);
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, []);  
   

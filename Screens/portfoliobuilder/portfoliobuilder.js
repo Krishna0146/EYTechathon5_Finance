@@ -103,7 +103,7 @@ const BPortfolioScreen = () => {
         </View>
         <TouchableOpacity
           style={styles.addButtons}
-          onPress={() => navigation.navigate('EachHold',{ name: item.name, username: username })}
+          onPress={() => navigation.navigate('EachHold',{ name: item.name, username: username,asset:"Stock" })}
         >
           <Ionicons name="chevron-forward" size={24} color="white" />
         </TouchableOpacity>
@@ -121,7 +121,7 @@ const BPortfolioScreen = () => {
       </View>
       <TouchableOpacity
         style={styles.addButtons}
-        onPress={() => navigation.navigate('EachHold',{ name: item.name, username: username })}
+        onPress={() => navigation.navigate('EachHold',{ name: item.name, username: username,asset:"MutualFund" })}
       >
         <Ionicons name="chevron-forward" size={24} color="white" />
       </TouchableOpacity>
@@ -139,7 +139,7 @@ const BPortfolioScreen = () => {
       </View>
       <TouchableOpacity
         style={styles.addButtons}
-        onPress={() => navigation.navigate('EachHold',{ name: item.name, username: username })}
+        onPress={() => navigation.navigate('EachHold',{ name: item.name, username: username,asset:"Bond" })}
       >
         <Ionicons name="chevron-forward" size={24} color="white" />
       </TouchableOpacity>
