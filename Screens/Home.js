@@ -20,7 +20,7 @@ const HomePage = () => {
   style={styles.box1}
   imageStyle={styles.box1Image}
 >
-  <TouchableOpacity style={styles.profileContainer} onPress={() => navigate.navigate('Portfolio',{username})}>
+  <TouchableOpacity style={styles.profileContainer}>
     <Image source={{ uri: 'https://cdn.pixabay.com/photo/2019/08/11/18/59/icon-4399701_1280.png' }} style={styles.profilePic} />
     <View style={styles.profileTextContainer}>
       <Text style={styles.greeting}>Hello</Text>

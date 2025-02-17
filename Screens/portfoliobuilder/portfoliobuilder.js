@@ -26,17 +26,6 @@ const BPortfolioScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // const [sgb, setSgb] = useState([
-  //   {
-  //     name: "Sovereign Gold Bonds 2024-25 Series V",
-  //     issuePrice: "₹6,500/g",
-  //     currentPrice: "--",
-  //     Maturity: "Apr 2038",
-  //     Quantity: "5",
-  //     Profit: "-500",
-  //   },
-  // ]);
-
   useEffect(() => {
     if (!username) return;  // Prevents API call if username is undefined
   
@@ -180,30 +169,127 @@ const BPortfolioScreen = () => {
     </>
   );
 
-  const renderSummaryCard = (type) => {
-    const summaryData = {
-      Equity: { investedValue: 36880, overallGain: 16663.66 },
-      SGB: { investedValue: 32500, overallGain: 2300 },
-      "Mutual Funds": { investedValue: 25000, overallGain: 1000 },
-    };
+// Then use mergeHoldings inside renderSummaryCard
+const stockPrices = [
+  { company_name: "Reliance Industries Ltd", ticker: "RELIANCE", current_price: 1224.90 },
+  { company_name: "Tata Consultancy Services Ltd", ticker: "TCS", current_price: 3904.50 },
+  { company_name: "HDFC Bank Ltd", ticker: "HDFCBANK", current_price: 1717.35 },
+  { company_name: "Bharti Airtel Ltd", ticker: "BHARTIARTL", current_price: 1675.55 },
+  { company_name: "Infosys Ltd", ticker: "INFY", current_price: 1842.30 },
+  { company_name: "Larsen & Toubro Ltd", ticker: "LT", current_price: 3221.35 },
+  { company_name: "Adani Enterprises Ltd", ticker: "ADANIENT", current_price: 2223.70 },
+  { company_name: "Asian Paints Ltd", ticker: "ASIANPAINT", current_price: 2250.85 },
+  { company_name: "Hindustan Unilever Ltd", ticker: "HINDUNILVR", current_price: 2329.40 },
+  { company_name: "Mahindra & Mahindra Ltd", ticker: "M&M", current_price: 2831.95 },
+  { company_name: "Maruti Suzuki India Ltd", ticker: "MARUTI", current_price: 12762.90 }
+];
 
-    const { investedValue, overallGain } = summaryData[type] || {};
-    const totalValue = investedValue + overallGain;
+// Function to get current price of a stock
+const getStockPrice = (stockName) => {
+  const stock = stockPrices.find((s) => s.company_name === stockName);
+  return stock ? stock.current_price : 0;
+};
 
-    return (
-      <View style={styles.summaryCard}>
-        <Text style={styles.label}>Total Invested in {type}</Text>
-        <Text style={styles.amount}>₹{investedValue}</Text>
-        <Text style={styles.gain}>
-          ↑ Overall Gain ₹{overallGain} (+
-          {((overallGain / investedValue) * 100).toFixed(2)}%)
-        </Text>
-        <Text style={styles.label}>Total Value</Text>
-        <Text style={styles.amount}>₹{totalValue}</Text>
-        <Text style={styles.todayGain}>↑ Today’s Gain ₹802.56 (+1.53%)</Text>
-      </View>
+// Mock data for Mutual Funds and their NAVs
+const mutualFundNavs = [
+  {
+    mf_identifier: "Nippon India Small Cap Fund",
+    nav: 145.8709
+  },
+  {
+    mf_identifier: "Nippon India Flexi Cap Fund",
+    nav: 14.84 // Example NAV
+  },
+  {
+    mf_identifier: "Nippon India Power & Infra Fund",
+    nav: 294.58
+  },
+  {
+    mf_identifier: "ICICI Prudential Equity & Debt Fund",
+    nav: 28.90
+  },
+  {
+    mf_identifier: "HDFC Balanced Advantage Fund",
+    nav: 476.05
+  },
+  {
+    mf_identifier: "SBI Equity Hybrid Fund",
+    nav: 87.29
+  },
+  {
+    mf_identifier: "Bank of India ELSS Tax Saver Dir Gr",
+    nav: 163.93
+  },
+  {
+    mf_identifier: "Nippon India ELSS Tax Saver Dir Gr",
+    nav: 122.78
+  }
+];
+
+// Function to get NAV for a mutual fund based on mf_identifier
+const getMutualFundNav = (mf_identifier) => {
+  const fund = mutualFundNavs.find(fund => fund.name === mf_identifier);
+  console.log(fund)
+  return fund ? fund.nav : 0; // Default to 0 if NAV is not found
+};
+
+// renderSummaryCard Function
+const renderSummaryCard = (type) => {
+  let investedValue = 0;
+  let totalValue = 0;
+
+  if (type === "Equity") {
+    const stockHoldings = mergeHoldings(
+      portfolio?.holdings?.filter((holding) => holding.asset === "Stock") || []
     );
-  };
+
+    console.log("Filtered Stock Holdings:", stockHoldings);
+
+    investedValue = stockHoldings.reduce(
+      (total, stock) => total + parseFloat(stock.bought_price) * stock.qty, 
+      0
+    );
+
+    totalValue = stockHoldings.reduce((total, stock) => {
+      const currentPrice = getStockPrice(stock.name);
+      return total + currentPrice * stock.qty;
+    }, 0);
+  } else if (type === "Mutual Funds") {
+    const mutualFundHoldings = mergeHoldings(
+      portfolio?.holdings?.filter((holding) => holding.asset === "MutualFund") || []
+    );
+
+    investedValue = mutualFundHoldings.reduce(
+      (total, mf) => total + parseFloat(mf.bought_price) * mf.qty, 
+      0
+    );
+
+    totalValue = mutualFundHoldings.reduce((total, mf) => {
+      const currentNav = getMutualFundNav(mf.mf_identifier); // Fetch NAV using mf_identifier
+      return total + currentNav * mf.qty; // Multiply qty by the NAV to calculate total value
+    }, 0);
+  }
+
+  const overallGain = totalValue - investedValue;
+  const gainPercentage = investedValue > 0 ? (overallGain / investedValue) * 100 : 0;
+
+  return (
+    <View style={styles.summaryCard}>
+      <Text style={styles.label}>Total Invested in {type}</Text>
+      <Text style={styles.amount}>₹{investedValue.toFixed(2)}</Text>
+      <Text 
+      style={[
+        styles.gain, 
+        { color: overallGain < 0 ? '#ff6347' : '#228b22' } // Change color based on overallGain
+      ]}
+    >
+      {overallGain < 0 ? '↓' : '↑'} Overall Gain ₹{overallGain.toFixed(2)} ({gainPercentage.toFixed(2)}%)
+    </Text>
+      <Text style={styles.label}>Total Value</Text>
+      <Text style={styles.amount}>₹{totalValue.toFixed(2)}</Text>
+    </View>
+  );
+};
 
   return (
     <>

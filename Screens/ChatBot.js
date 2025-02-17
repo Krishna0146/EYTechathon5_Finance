@@ -25,7 +25,9 @@ export default function ChatScreen() {
     const keywords = [
       "finance", "financial", "investment", "invest", "stock", "stocks", 
       "bond", "bonds", "mutual fund", "mutual funds", "digital marketing", 
-      "marketing", "portfolio", "asset", "assets", "trading", "trade","price"
+      "marketing", "portfolio", "asset", "assets", "trading", "trade","price",
+      "amount","Amount","money","Money","Investment","Marketing","marketing","Trading",
+      "Spending","spending","Selling","selling","buying","Buying"
     ];
     // Convert input text to lowercase and check if any keyword exists
     const containsKeyword = keywords.some((word) => 

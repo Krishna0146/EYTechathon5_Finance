@@ -107,7 +107,13 @@ const EachHold = ({ route }) => {
         setPurchaseHistory((prev) => prev.filter((record) => record.id !== id)); // Remove deleted record
       }
     } catch (error) {
-      console.error("Error deleting record:", error);
+      // Check if the error is a 404 error related to fetching portfolio
+      if (error.response && error.response.status === 404) {
+        console.error("Error: Record not found (404)");
+        // Handle the 404 error specifically, such as showing a custom message to the user
+      } else {
+        console.error("Error deleting record:", error); // Handle other errors
+      }
     }
     setSelectedMenuId(null);
   };  
