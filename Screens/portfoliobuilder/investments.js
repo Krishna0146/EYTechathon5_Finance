@@ -7,48 +7,60 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native"; 
-import axios from "axios"; 
+import { useNavigation, useRoute } from "@react-navigation/native";
+import axios from "axios";
 import api from "../api";
-import { useRoute } from '@react-navigation/native';
 
 const InvestmentScreen = () => {
   const [investments, setInvestments] = useState([]);
   const [filteredInvestments, setFilteredInvestments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
   const route = useRoute();
-  const { username,asset } = route.params || {};
+  const { username, asset } = route.params || {};
 
   useEffect(() => {
     const fetchInvestments = async () => {
       try {
-        const response = await axios.get(`${api}/api/stocks/getallstocks`);
+        let response;
+        if (asset === "Stock") {
+          response = await axios.get(`${api}/api/stocks/getallstocks`);
+        } else if (asset === "MutualFund") {
+          response = await axios.get(`${api}/api/stocks/getallmfs`);
+        } else {
+          return;
+        }
         const updatedData = response.data.map((item) => ({
           ...item,
-          ticker: item.ticker ? item.ticker.replace(".NS", "") : "N/A",
-          price: item.price ?? 100, 
-          price_change_percentage_24h: item.price_change_percentage_24h ?? 0, 
+          ticker: asset === "Stock" 
+            ? (item.ticker ? item.ticker.replace(".NS", "") : "N/A") 
+            : asset === "MutualFund" 
+            ? item.mf_identifier || "N/A" 
+            : "N/A",
+          price: item.price !== "N/A" ? Number(item.price) : 100,  // Handle "N/A"
+          price_change_percentage_24h: item.change_percentage !== "N/A" 
+            ? Number(item.change_percentage) 
+            : 0,  // Handle "N/A"
         }));
         setInvestments(updatedData);
         setFilteredInvestments(updatedData);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching investments:", error);
       }
     };
-    fetchInvestments(); // Initial fetch
-    // Fetch data every 2 seconds
-    const interval = setInterval(fetchInvestments, 6000000);
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, []);  
-  
+    fetchInvestments();
+    const interval = setInterval(fetchInvestments, 600000);
+    return () => clearInterval(interval);
+  }, [asset, username]);
+
   const handleSearch = (text) => {
     setSearchTerm(text);
     if (text) {
       const filteredData = investments.filter(
         (item) =>
           item.stock_name?.toLowerCase().includes(text.toLowerCase()) ||
-          item.ticker?.toLowerCase().includes(text.toLowerCase())
+          item.ticker?.toLowerCase().includes(text.toLowerCase()) ||
+          item.mf_name?.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredInvestments(filteredData);
     } else {
@@ -58,42 +70,60 @@ const InvestmentScreen = () => {
 
   const handleItemPress = (item) => {
     navigation.navigate("DetailScreen", {
-      username:username,
-      asset:asset,
-      stockName: item.stock_name || "Unnamed Stock",
-      ticker: item.ticker || "N/A",
-      price: Number(item.price ?? 0), // Ensure it's a number
-      priceChange: Number(item.price_change_percentage_24h ?? 0),  
+      username: username,
+      asset: asset,
+      stockName:
+        asset === "Stock"
+          ? item.stock_name || "Unnamed Stock"
+          : item.mf_name || "Unnamed Fund",
+      ticker:
+        asset === "Stock"
+          ? item.ticker || "N/A"
+          : asset === "MutualFund"
+          ? item.mf_identifier || "N/A"
+          : "N/A",
+      price: Number(item.price ?? 0),
+      priceChange: Number(item.price_change_percentage_24h ?? 0),
     });
-  };  
+  };
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity 
-      style={styles.listItem} 
-      onPress={() => handleItemPress(item)}
-    >
-      <View style={styles.leftContainer}>
-        <Text style={styles.symbol}>
-          {item.ticker ? item.ticker.toUpperCase() : "N/A"}
-        </Text>
-        <Text style={styles.name}>{item.stock_name || "Unnamed Stock"}</Text>
-      </View>
-      <View style={styles.rightContainer}>
-        <Text style={styles.price}>₹{(item.price ?? 0).toFixed(2)}</Text>
-        <Text
-          style={[
-            styles.change,
-            (item.price_change_percentage_24h ?? 0) > 0
-              ? styles.positive
-              : styles.negative,
-          ]}
-        >
-          {(item.price_change_percentage_24h ?? 0) > 0 ? "+" : ""}
-          {(item.price_change_percentage_24h ?? 0).toFixed(2)}%
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item }) => {
+    const price = Number(item.price ?? 0); // Ensure price is a number
+    const priceChange = Number(item.price_change_percentage_24h ?? 0);
+    return (
+      <TouchableOpacity
+        style={styles.listItem}
+        onPress={() => handleItemPress(item)}
+      >
+        <View style={styles.leftContainer}>
+          <Text style={styles.symbol}>
+            {asset === "Stock"
+              ? item.ticker
+                ? item.ticker.toUpperCase()
+                : "N/A"
+              : item.mf_name || "Unnamed Fund"}
+          </Text>
+          <Text style={styles.name}>
+            {asset === "Stock"
+              ? item.stock_name || "Unnamed Stock"
+              : item.mf_identifier || "Unnamed Fund"}
+          </Text>
+        </View>
+        <View style={styles.rightContainer}>
+          <Text style={styles.price}>₹{price.toFixed(2)}</Text>
+          <Text
+            style={[
+              styles.change,
+              priceChange > 0 ? styles.positive : styles.negative,
+            ]}
+          >
+            {priceChange > 0 ? "+" : ""}
+            {priceChange.toFixed(2)}%
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -106,7 +136,9 @@ const InvestmentScreen = () => {
       <FlatList
         data={filteredInvestments}
         renderItem={renderItem}
-        keyExtractor={(item) => item.stock_id?.toString() ?? Math.random().toString()}
+        keyExtractor={(item) =>
+          item.stock_id?.toString() ?? item.mf_id?.toString()
+        }
       />
     </View>
   );
@@ -126,6 +158,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingLeft: 10,
     marginBottom: 10,
+    fontFamily:"monospace"
   },
   listItem: {
     padding: 15,
@@ -133,17 +166,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+    fontFamily:"monospace"
   },
   leftContainer: {
     flexDirection: "column",
   },
   symbol: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
+    fontFamily:"monospace",
+    letterSpacing: -1,
   },
   name: {
     fontSize: 16,
     color: "#666",
+    fontFamily:"monospace"
   },
   rightContainer: {
     alignItems: "flex-end",
@@ -151,16 +188,19 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: "bold",
+    fontFamily:"monospace"
   },
   change: {
     fontSize: 14,
+    fontFamily:"monospace"
   },
   positive: {
     color: "green",
+    fontFamily:"monospace"
   },
   negative: {
     color: "red",
+    fontFamily:"monospace"
   },
 });
-
 export default InvestmentScreen;

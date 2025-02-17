@@ -7,8 +7,7 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-
-const API_URL = "http://192.168.0.189:9000"; // Change if hosted
+import api from "./api";
 
 export default function ChatScreen() {
   const [chatInput, setChatInput] = useState("");
@@ -19,23 +18,19 @@ export default function ChatScreen() {
   const sendMessage = async () => {
     if (!chatInput.trim()) return;
     setLoading(true);
-  
     const newMessage = { text: chatInput, role: "user" };
     setMessages((prev) => [...prev, newMessage]);
     setChatInput("");
-  
     // Define the list of keywords
     const keywords = [
       "finance", "financial", "investment", "invest", "stock", "stocks", 
       "bond", "bonds", "mutual fund", "mutual funds", "digital marketing", 
       "marketing", "portfolio", "asset", "assets", "trading", "trade","price"
     ];
-  
     // Convert input text to lowercase and check if any keyword exists
     const containsKeyword = keywords.some((word) => 
       chatInput.toLowerCase().includes(word)
     );
-  
     if (!containsKeyword) {
       // Show irrelevant response if no keyword matches
       setMessages((prev) => [
@@ -46,7 +41,7 @@ export default function ChatScreen() {
       return;
     }
     try {
-      const response = await fetch(`${API_URL}/chat`, {
+      const response = await fetch(`${api}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ chat: chatInput, history: messages }),

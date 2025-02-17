@@ -12,10 +12,12 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
 import api from "../api";
+import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from "react-native-modal-datetime-picker"; 
 
 const EachHold = ({ route }) => {
   const { name, username,asset } = route.params;
+  const navigate = useNavigation();
   const [sellingPrice, setSellingPrice] = useState(""); 
   const [sellingQuantity, setSellingQuantity] = useState("");
   const [sellingDate, setSellingDate] = useState("");
@@ -29,11 +31,18 @@ const EachHold = ({ route }) => {
 
   useEffect(() => {
     fetchPortfolioData();
-  }, []);
+  }, []); // Runs on initial mount
+  
+  useEffect(() => {
+    if (purchaseHistory.length === 0) {
+      fetchPortfolioData();
+    }
+  }, [purchaseHistory]); // Runs when purchaseHistory updates  
 
   const fetchPortfolioData = async () => {
     try {
       const response = await axios.get(`${api}/api/holdings/portfolio/${username}/${name}`);
+      console.log(response)
       const portfolio = response.data;
       const formattedData = portfolio.holdings.map((holding) => ({
         id: holding._id,
@@ -41,8 +50,13 @@ const EachHold = ({ route }) => {
         quantity: holding.qty.toString(),
         value: holding.bought_price.toString(),
       }));
-      console.log(portfolio.holdings[0].asset);
-      console.log(portfolio.holdings[0].name);
+      //console.log("format",formattedData);
+      //console.log(portfolio.holdings[0].asset);
+      //console.log(portfolio.holdings[0].name);
+      // if (formattedData.length === 0) {
+      //   navigate.navigate("Portfolio",{username}); // Redirect if no data is present
+      //   return;
+      // }
       setPurchaseHistory(formattedData);
       setLoading(false);
     } catch (error) {
@@ -81,17 +95,21 @@ const EachHold = ({ route }) => {
       Alert.alert("Error", "Failed to submit sell data.");
     }
   };
-    
-    const handleDelete = async (id) => {
+
+  const handleDelete = async (id) => {
     try {
-      //console.log(`Deleting: ${api}/api/holdings/delete/${username}/${id}`);
-      await axios.delete(`${api}/api/holdings/delete/${username}/${id}`);
-      fetchPortfolioData();
+      const response = await axios.delete(`${api}/api/holdings/delete/${username}/${id}`);
+      console.log("Delete Response Data:", response.data); // Debugging log
+  
+      if (response.data && response.data.message === "Holding deleted successfully") {
+        console.log("Holding deleted, updating state...");
+        setPurchaseHistory((prev) => prev.filter((record) => record.id !== id)); // Remove deleted record
+      }
     } catch (error) {
       console.error("Error deleting record:", error);
     }
     setSelectedMenuId(null);
-  };
+  };  
 
   const handleUpdate = async () => {
     if (!selectedRecord) return;
@@ -179,44 +197,47 @@ const EachHold = ({ route }) => {
 
       {loading ? (
         <ActivityIndicator size="large" color="#007BFF" />
+      ) : purchaseHistory.length === 0 ? ( // Check if no records are present
+        <View style={styles.noRecordsContainer}>
+          <Text style={styles.noRecordsText}>No records present.</Text>
+        </View>
       ) : (
         <ScrollView>
           {purchaseHistory.map((record) => (
             <View key={record.id} style={styles.record}>
-            <Text style={styles.recordDate}>{record.date}</Text>
-            <Text style={styles.recordQuantity}>{record.quantity}</Text>
-            <View style={styles.valueContainer}>
-              <Text style={styles.recordValue}>₹{record.value}</Text>
-              
-              {/* Three Dots Button */}
-              <TouchableOpacity
-                style={styles.threeDotsButton}
-                onPress={() =>
-                  setSelectedMenuId(selectedMenuId === record.id ? null : record.id)
-                }
-              >
-                <Icon name="more-vert" size={24} color="#000" />
-              </TouchableOpacity>
-          
-              {/* Dropdown Menu */}
-              {selectedMenuId === record.id && (
-              <View style={styles.menuWrapper}>
-                <View style={styles.menu}>
-                  <TouchableOpacity style={styles.menuItem} onPress={() => handleEditPress(record)}>
-                    <Text style={styles.menuText}>✏️ Edit</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.menuItem} onPress={() => handleDelete(record.id)}>
-                    <Text style={styles.menuText}>🗑️ Delete</Text>
-                  </TouchableOpacity>
-                </View>
+              <Text style={styles.recordDate}>{record.date}</Text>
+              <Text style={styles.recordQuantity}>{record.quantity}</Text>
+              <View style={styles.valueContainer}>
+                <Text style={styles.recordValue}>₹{record.value}</Text>
+                
+                {/* Three Dots Button */}
+                <TouchableOpacity
+                  style={styles.threeDotsButton}
+                  onPress={() =>
+                    setSelectedMenuId(selectedMenuId === record.id ? null : record.id)
+                  }
+                >
+                  <Icon name="more-vert" size={24} color="#000" />
+                </TouchableOpacity>
+            
+                {/* Dropdown Menu */}
+                {selectedMenuId === record.id && (
+                  <View style={styles.menuWrapper}>
+                    <View style={styles.menu}>
+                      <TouchableOpacity style={styles.menuItem} onPress={() => handleEditPress(record)}>
+                        <Text style={styles.menuText}>✏️ Edit</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.menuItem} onPress={() => handleDelete(record.id)}>
+                        <Text style={styles.menuText}>🗑️ Delete</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
               </View>
-            )}
             </View>
-          </View>
           ))}
         </ScrollView>
       )}
-
       {/* Edit Modal */}
       <Modal visible={editModalVisible} transparent={true} animationType="slide">
         <View style={styles.modalOverlay}>
@@ -417,5 +438,15 @@ const styles = StyleSheet.create({
   saveButton: { backgroundColor: "#007BFF", padding: 10, borderRadius: 5 },
   cancelButton: { backgroundColor: "#FF4136", padding: 10, borderRadius: 5 },
   buttonText: { color: "white", fontWeight: "bold",fontFamily:"monospace" },
+  noRecordsContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  noRecordsText: {
+    fontSize: 16,
+    color: "#888",
+    fontFamily:"monospace"
+  },
 });
 export default EachHold;
