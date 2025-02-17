@@ -45,7 +45,7 @@ const HomePage = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.box}
-            onPress={() => navigate.push('VirtualPortfolio')}>
+            onPress={() => navigate.push('Portfolio',{username})}>
             <ImageBackground
               source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGt2NB9wJaM_s70MHfMLRPyxUVSbR-PQLWpQ&s' }}
               style={styles.backgroundImage}

@@ -89,6 +89,7 @@ const EachHold = ({ route }) => {
         sellingDate,
       });
       Alert.alert("Success", "Sell data submitted successfully!");
+      navigate.push('Portfolio',{username});
       console.log(response.data.removedStocks);
     } catch (error) {
       console.error(error);

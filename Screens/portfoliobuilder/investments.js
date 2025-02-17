@@ -37,10 +37,10 @@ const InvestmentScreen = () => {
             : asset === "MutualFund" 
             ? item.mf_identifier || "N/A" 
             : "N/A",
-          price: item.price !== "N/A" ? Number(item.price) : 100,  // Handle "N/A"
-          price_change_percentage_24h: item.change_percentage !== "N/A" 
-            ? Number(item.change_percentage) 
-            : 0,  // Handle "N/A"
+          price: item.price !== "N/A" ? Number(item.price) : 100,  
+          price_change_percentage_24h: asset === "Stock" 
+            ? Number(item.price_change_percentage_24h ?? 0) 
+            : Number(item.change_percentage ?? 0), 
         }));
         setInvestments(updatedData);
         setFilteredInvestments(updatedData);
@@ -82,7 +82,7 @@ const InvestmentScreen = () => {
           : asset === "MutualFund"
           ? item.mf_identifier || "N/A"
           : "N/A",
-      price: Number(item.price ?? 0),
+      price: Number(item.price ?? 0),//price_change_percentage_24h
       priceChange: Number(item.price_change_percentage_24h ?? 0),
     });
   };

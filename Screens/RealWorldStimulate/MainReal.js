@@ -9,11 +9,11 @@ const ScenarioList = () => {
   const [firstSearch, setFirstSearch] = useState(true);
 
   const scenarios = [
-    { id: 1, name: 'Union Budget', sector: 'Finance' },
-    { id: 2, name: 'Auto Sector', sector: 'Automobile' },
-    { id: 3, name: 'Pharma Sector', sector: 'Healthcare' },
-    { id: 4, name: 'Renewable Energy Sector', sector: 'Energy' },
-    { id: 5, name: 'FMCG Sector', sector: 'Consumer Goods' },
+    { id: 1, name: 'Union Budget and Economic Policies Quiz', sector: 'Finance' },
+    { id: 2, name: 'Financial Planning and Budgeting Quiz', sector: 'Automobile' },
+    { id: 3, name: "Investing Basics Quiz", sector: 'Healthcare' },
+    { id: 4, name: 'Debt Management Quiz', sector: 'Energy' },
+    { id: 5, name: 'Retirement Planning Quiz', sector: 'Consumer Goods' },
   ];
   const handleSearch = () => {
     if (searchText.trim() === '') return;
@@ -23,7 +23,7 @@ const ScenarioList = () => {
   };
 
   const handleScenarioPress = (id, name) => {
-    navigation.navigate('conversation', { id, name, type: 'scenario' });
+    navigation.navigate('conversation', { name });
   };
 
   return (
