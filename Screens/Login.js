@@ -74,7 +74,7 @@ export default function LoginPage() {
       const response = await axios.post(`${api}/api/auth/login`, { email, otp });
 
       if (response.data.token) {
-        Alert.alert('Login Successful', `Welcome, ${email}!`);
+        Alert.alert('Login Successful',` Welcome, ${email}!`);
         const username = response.data.user.username; // Get the username
         navigation.push('Home', { username }); 
       } else {
@@ -118,26 +118,32 @@ export default function LoginPage() {
   return (
     <View style={styles.container}>
       <View style={styles.animationContainer}>
-        <LottieView 
-          source={require("../assets/animations/Animation - 1739111906766.json")} 
-          autoPlay 
-          loop 
-          style={{ width: 200, height: 200 }} 
+        <LottieView
+          source={require("../assets/animations/man-thinks.json")}
+          autoPlay
+          loop
+          style={{ width: 200, height: 200 }}
         />
-          </View>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Login</Text>
-          </View>
-      <TextInput 
-        style={styles.input} placeholder="Email" keyboardType="email-address" 
-        onChangeText={setEmail} value={email}
+      </View>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Login</Text>
+      </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        keyboardType="email-address"
+        onChangeText={setEmail}
+        value={email}
       />
       {/* Show password field for login or reset password */}
       {!isResetPassword ? (
         <>
-          <TextInput 
-            style={styles.input} placeholder="Password" secureTextEntry 
-            onChangeText={setPassword} value={password}
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+            onChangeText={setPassword}
+            value={password}
           />
           {/* Show "Generate OTP" button if OTP is not generated yet */}
           {!otpGenerated ? (
@@ -160,14 +166,15 @@ export default function LoginPage() {
                   <View
                     key={index}
                     style={[styles.cell, isFocused && styles.focusCell]}
-                    onLayout={getCellOnLayoutHandler(index)}>
+                    onLayout={getCellOnLayoutHandler(index)}
+                  >
                     <Text style={styles.cellText}>
                       {symbol || (isFocused ? <Cursor /> : null)}
                     </Text>
                   </View>
                 )}
               />
-               {/* Submit OTP Button */}
+              {/* Submit OTP Button */}
               <TouchableOpacity style={styles.otpButton} onPress={handleLogin}>
                 <Text style={styles.buttonText}>Submit OTP</Text>
               </TouchableOpacity>
@@ -177,12 +184,18 @@ export default function LoginPage() {
       ) : (
         <>
           {/* Reset Password Fields */}
-          <TextInput 
-            style={styles.input} placeholder="New Password" secureTextEntry 
-            onChangeText={setNewPassword} value={newPassword}
+          <TextInput
+            style={styles.input}
+            placeholder="New Password"
+            secureTextEntry
+            onChangeText={setNewPassword}
+            value={newPassword}
           />
           {!otpGenerated ? (
-            <TouchableOpacity style={styles.button} onPress={handleResetGenerateOtp}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleResetGenerateOtp}
+            >
               <Text style={styles.buttonText}>Generate OTP</Text>
             </TouchableOpacity>
           ) : (
@@ -201,15 +214,19 @@ export default function LoginPage() {
                   <View
                     key={index}
                     style={[styles.cell, isFocused && styles.focusCell]}
-                    onLayout={getCellOnLayoutHandler(index)}>
+                    onLayout={getCellOnLayoutHandler(index)}
+                  >
                     <Text style={styles.cellText}>
                       {symbol || (isFocused ? <Cursor /> : null)}
                     </Text>
                   </View>
                 )}
               />
-               {/* Submit OTP Button */}
-              <TouchableOpacity style={styles.otpButton} onPress={handleResetPassword}>
+              {/* Submit OTP Button */}
+              <TouchableOpacity
+                style={styles.otpButton}
+                onPress={handleResetPassword}
+              >
                 <Text style={styles.buttonText}>Reset Password</Text>
               </TouchableOpacity>
             </View>
@@ -232,45 +249,88 @@ export default function LoginPage() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f8f8f8', padding: 20 },
-  input: { width: '100%', height: 50, backgroundColor: '#fff', borderRadius: 8, paddingHorizontal: 15, marginBottom: 20, borderWidth: 1, borderColor: '#ccc', fontFamily: "monospace" },
-  button: { width: '100%', height: 50, backgroundColor: '#3399ff', borderRadius: 8, justifyContent: 'center', alignItems: 'center', marginBottom:15 },
-  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold', fontFamily: "monospace" },
-  otpContainer: { flexDirection: 'row', width: '100%', marginBottom: 15 },
-  otpInput: { 
-    width: '70%', 
-    height: 50, 
-    backgroundColor: '#fff', 
-    borderRadius: 8, 
-    paddingHorizontal: 15, 
-    borderWidth: 1, 
-    borderColor: '#ccc',
-    fontFamily: "monospace"
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f8f8f8",
+    padding: 20,
   },
-  otpButton: { 
-    width: '30%', 
-    height: 50, 
-    backgroundColor: '#3399ff', 
-    borderRadius: 8, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    marginLeft: -19 
+  input: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    fontFamily: "Inter",
+  },
+  button: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#228b22",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+    fontFamily: "Bebas Neue",
+  },
+  otpContainer: { flexDirection: "row", width: "100%", marginBottom: 15 },
+  otpInput: {
+    width: "70%",
+    height: 50,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    fontFamily: "Inter",
+  },
+  otpButton: {
+    width: "30%",
+    height: 50,
+    backgroundColor: "#3399ff",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: -19,
   },
   animationContainer: {
     justifyContent: "center",
     alignItems: "center",
     width: 200,
     height: 200, // Set a fixed size
-},
-  link: { color: '#007BFF', fontSize: 16, marginTop: 10, fontFamily: "monospace" },
-  signUpContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 20 },
-  normalText: { fontSize: 16, color: '#555', fontFamily: "monospace" },
-  signUpLink: { fontSize: 16, color: '#007BFF', textDecorationLine: 'underline', fontFamily: "monospace" },
+  },
+  link: {
+    color: "#228b22",
+    fontSize: 16,
+    marginTop: 10,
+    fontFamily: "Bebas Neue",
+  },
+  signUpContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  normalText: { fontSize: 16, color: "#555", fontFamily: "Inter" },
+  signUpLink: {
+    fontSize: 16,
+    color: "#228b22",
+    textDecorationLine: "underline",
+    fontFamily: "Montserrat",
+  },
   codeFieldRoot: {
-    width: '80%',
+    width: "80%",
     marginBottom: 10,
-    alignSelf: 'center',
-    paddingRight:22
+    alignSelf: "center",
+    paddingRight: 22,
   },
   cell: {
     width: 35,
@@ -279,33 +339,33 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginHorizontal: 1,
     borderWidth: 1,
-    borderColor: '#ccc',
-    textAlign: 'center',
+    borderColor: "#ccc",
+    textAlign: "center",
     borderRadius: 8,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
   },
   focusCell: {
-    borderColor: '#3399ff',
+    borderColor: "#3399ff",
   },
   cellText: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    fontFamily:"monospace"
+    fontWeight: "bold",
+    color: "#333",
+    fontFamily: "Inter",
   },
   headerContainer: {
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
     marginBottom: 20, // Space below the title
   },
   headerText: {
     fontSize: 26,
     fontWeight: 900,
-    fontFamily:"monospace",
-    color: '#333',
-    textTransform: 'uppercase', // Makes text look more professional
-    letterSpacing: 1, // Adds spacing for a refined look
-  },
+    fontFamily: "Bebas Neue",
+    color: "#333",
+    textTransform: "uppercase", // Makes text look more professional
+    letterSpacing: 1, // Adds spacing for a refined look
+  },
 });

@@ -109,7 +109,7 @@ const EachHold = ({ route }) => {
     } catch (error) {
       // Check if the error is a 404 error related to fetching portfolio
       if (error.response && error.response.status === 404) {
-        console.error("Error: Record not found (404)");
+        console.error('No record present');
         // Handle the 404 error specifically, such as showing a custom message to the user
       } else {
         console.error("Error deleting record:", error); // Handle other errors
@@ -304,9 +304,9 @@ const EachHold = ({ route }) => {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#F5F5F5" },
   header: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 10 },
-  headerTextLeft: { fontSize: 14, fontWeight: "bold",fontFamily:"monospace" },
-  headerTextMiddle: { fontSize: 14, fontWeight: "bold",fontFamily:"monospace" },
-  headerTextRight: { fontSize: 14, fontWeight: "bold",fontFamily:"monospace" },
+  headerTextLeft: { fontSize: 14, fontWeight: "bold",fontFamily:"Bebas Neue" },
+  headerTextMiddle: { fontSize: 14, fontWeight: "bold",fontFamily:"Bebas Neue" },
+  headerTextRight: { fontSize: 14, fontWeight: "bold",fontFamily:"Bebas Neue" },
   headerLine: { height: 1, backgroundColor: "#ccc", marginBottom: 10 },
   sellBlock: {
     width: "100%",
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 10,
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   input: {
     width: "100%",
@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
   dateText: {
     color: "#fff",
     textAlign: "center",
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   sellButton: {
     backgroundColor: "#00ca4e",
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontWeight: "bold",
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   headerLine: {
     height: 1,
@@ -386,9 +386,9 @@ const styles = StyleSheet.create({
   },
   valueContainer: { flexDirection: "row", alignItems: "center" },
   threeDotsButton: { padding: 5 },
-  recordDate: { fontSize: 16,fontFamily:"monospace" },
-  recordQuantity: { fontSize: 16,fontFamily:"monospace" },
-  recordValue: { fontSize: 16, marginRight: 10,fontFamily:"monospace" },  
+  recordDate: { fontSize: 16,fontFamily:"Bebas Neue" },
+  recordQuantity: { fontSize: 16,fontFamily:"Bebas Neue" },
+  recordValue: { fontSize: 16, marginRight: 10,fontFamily:"Bebas Neue" },  
   menuWrapper: {
     position: "absolute",
     top: -20,
@@ -412,13 +412,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: "row",
     alignItems: "center",
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   menuText: {
     fontSize: 16,
     fontWeight: "500",
     color: "#333",
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   modalOverlay: {
     flex: 1,
@@ -426,8 +426,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
-  editModal: { width: 300, backgroundColor: "white", padding: 20, borderRadius: 10,fontFamily:"monospace" },
-  modalTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 10,fontFamily:"monospace" },
+  editModal: { width: 300, backgroundColor: "white", padding: 20, borderRadius: 10,fontFamily:"Bebas Neue" },
+  modalTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 10,fontFamily:"Bebas Neue" },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     width: "100%",
-    fontFamily:"monospace",
+    fontFamily:"Bebas Neue",
   },
   buttonContainer: {
     flexDirection: "row",
@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
   },
   saveButton: { backgroundColor: "#007BFF", padding: 10, borderRadius: 5 },
   cancelButton: { backgroundColor: "#FF4136", padding: 10, borderRadius: 5 },
-  buttonText: { color: "white", fontWeight: "bold",fontFamily:"monospace" },
+  buttonText: { color: "white", fontWeight: "bold",fontFamily:"Bebas Neue" },
   noRecordsContainer: {
     alignItems: "center",
     justifyContent: "center",
@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
   noRecordsText: {
     fontSize: 16,
     color: "#888",
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
 });
 export default EachHold;

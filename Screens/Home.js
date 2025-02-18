@@ -154,13 +154,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
     color: 'white',
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   userName: {
     fontSize: 28,
     fontWeight: 'bold',
     color: 'white',
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   box2: {
     padding: 20,
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', // Makes the text thick
     color: 'black', // Black text
     textAlign: 'center',
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
 });
 

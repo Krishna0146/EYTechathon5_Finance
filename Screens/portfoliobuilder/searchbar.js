@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     paddingLeft: 10,
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   addButton: {
     backgroundColor: "#2196F3",
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 14,
     fontWeight: "bold",
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
 });
 

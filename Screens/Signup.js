@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
 import LottieView from "lottie-react-native";
+import api from "./api.js"
 
 export default function SignUpPage() {
   const [username, setUsername] = useState('');
@@ -24,21 +25,36 @@ export default function SignUpPage() {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
-
+  
     try {
-      const response = await axios.post("http://192.168.68.119:3000/api/auth/register", {
+      const response = await axios.post(`${api}/api/auth/register`, {
         username, email, password, age, gender, location, occupation, education
       });
-
-      Alert.alert('Registration Successful', `Welcome, ${username}!`);
-      const username = response.data.user.username;
-      navigation.push('Home', { username });
-      
+  
+      if (response.status >= 200 && response.status < 300) {
+        // Successful response
+        Alert.alert('Registration Successful', `Welcome, ${username}!`);
+        navigation.push('Home', { username: response.data.username }); // Use the returned username directly
+      } else {
+        // In case response is not successful but no error is thrown
+        Alert.alert('Error', 'Something went wrong.');
+      }
     } catch (error) {
-      Alert.alert('Error', error.response?.data?.message || 'Something went wrong.');
+      console.error("Error Details:", error); // Log error details for better debugging
+  
+      if (error.response) {
+        // If response data exists (e.g., validation error from the server)
+        Alert.alert('Error', error.response?.data?.message || 'Something went wrong.');
+      } else if (error.request) {
+        // If no response was received
+        Alert.alert('Error', 'No response from server. Please try again later.');
+      } else {
+        // If there was an issue with setting up the request
+        Alert.alert('Error', 'Request setup failed. Please check your network connection.');
+      }
     }
-  };
-
+  };  
+  
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
       <View style={styles.container}>

@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingLeft: 10,
     marginBottom: 10,
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   listItem: {
     padding: 15,
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   leftContainer: {
     flexDirection: "column",
@@ -174,13 +174,13 @@ const styles = StyleSheet.create({
   symbol: {
     fontSize: 16,
     fontWeight: "bold",
-    fontFamily:"monospace",
+    fontFamily:"Bebas Neue",
     letterSpacing: -1,
   },
   name: {
     fontSize: 16,
     color: "#666",
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   rightContainer: {
     alignItems: "flex-end",
@@ -188,19 +188,19 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: "bold",
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   change: {
     fontSize: 14,
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   positive: {
     color: "green",
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
   negative: {
     color: "red",
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
 });
 export default InvestmentScreen;

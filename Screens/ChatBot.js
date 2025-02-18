@@ -91,51 +91,57 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f4f4f4",
-    padding: 10,
+    padding: 12,
   },
   message: {
-    padding: 10,
-    marginVertical: 5,
+    padding: 12,
+    marginVertical: 8,
     borderRadius: 10,
     maxWidth: "80%",
   },
   userMsg: {
     alignSelf: "flex-end",
-    backgroundColor: "#007bff",
-    fontFamily:"monospace"
+    backgroundColor: "#228b22",
+    fontFamily: "Bebas Neue",
   },
   botMsg: {
     alignSelf: "flex-start",
-    backgroundColor: "#3399ff",
-    fontFamily:"monospace"
+    backgroundColor: "#228b22",
+    fontFamily: "Bebas Neue",
   },
   messageText: {
     color: "#fff",
-    fontFamily:"monospace"
+    fontFamily: "Bebas Neue",
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
+    padding: 15,
     borderTopWidth: 1,
     borderColor: "#ccc",
+    backgroundColor: "#f5f5f5",
   },
   input: {
     flex: 1,
-    padding: 10,
+    padding: 12,
     backgroundColor: "#fff",
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "#ccc",
+    fontFamily: "Bebas Neue",
+    fontSize: 16,
   },
   button: {
-    marginLeft: 10,
-    backgroundColor: "#007bff",
-    padding: 10,
+    marginLeft: 12,
+    backgroundColor: "#228b22",
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    fontFamily: "Bebas Neue",
     borderRadius: 5,
   },
   buttonText: {
     color: "#fff",
-    fontFamily:"monospace"
-  },
+    fontFamily: "Bebas Neue",
+    fontWeight: "bold", // Added bold text for the button
+  },
 });

@@ -309,7 +309,6 @@ const PortfolioScreen = () => {
             <View style={styles.header}>
               <Text style={styles.title}>Virtual Portfolio</Text>
             </View>
-
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}

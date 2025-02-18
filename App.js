@@ -34,6 +34,8 @@ import Sectors from "./Screens/RealWorldStimulate/Sector";
 import LoanEMICalculator from "./Screens/FinancialCal/LoanEMIcal";
 import ModuleDetailScreen from "./Screens/LearnStream/ModuleDetail";
 import ChatSearchScreen from "./Screens/SearchBot";
+import BondList from "./Screens/portfoliobuilder/Bonds";
+import OnboardingScreen from "./Screens/Carusel.js"
 
 const Stack = createNativeStackNavigator();
 
@@ -42,7 +44,7 @@ function App() {
     <I18nextProvider i18n={i18n}>
       <NavigationContainer>
       <StatusBar barStyle="dark-content" hidden={false} />
-        <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="Slide" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Splash" component={SplashScreen} />
           <Stack.Screen name="Home" component={HomePage}/>
           <Stack.Screen name="Learn" component={LearnPage} />
@@ -57,6 +59,8 @@ function App() {
           <Stack.Screen name="Signup" component={SignUpPage} />
           <Stack.Screen name="FHealthS" component={FinancialHealthScore} />
           <Stack.Screen name="Notify" component={Notify} />
+          <Stack.Screen name="Bond" component={BondList} />
+          <Stack.Screen name="Slide" component={OnboardingScreen} />
           <Stack.Screen name="mreal" component={ScenarioList} />
           <Stack.Screen name="chat" component={ChatScreen} />
           <Stack.Screen name="userlearn" component={UserDashboard} />

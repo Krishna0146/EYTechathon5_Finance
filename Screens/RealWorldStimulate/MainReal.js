@@ -9,11 +9,11 @@ const ScenarioList = () => {
   const [firstSearch, setFirstSearch] = useState(true);
 
   const scenarios = [
-    { id: 1, name: 'Union Budget and Economic Policies Quiz', sector: 'Finance' },
-    { id: 2, name: 'Financial Planning and Budgeting Quiz', sector: 'Automobile' },
-    { id: 3, name: "Investing Basics Quiz", sector: 'Healthcare' },
-    { id: 4, name: 'Debt Management Quiz', sector: 'Energy' },
-    { id: 5, name: 'Retirement Planning Quiz', sector: 'Consumer Goods' },
+    { id: 1, name: 'Union Budget and Economic Policies', sector: 'Finance' },
+    { id: 2, name: 'Financial Planning and Budgeting', sector: 'Automobile' },
+    { id: 3, name: "Investing Basics", sector: 'Healthcare' },
+    { id: 4, name: 'Debt Management', sector: 'Energy' },
+    { id: 5, name: 'Retirement Planning', sector: 'Consumer Goods' },
   ];
   const handleSearch = () => {
     if (searchText.trim() === '') return;

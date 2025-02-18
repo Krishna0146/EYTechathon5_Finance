@@ -25,6 +25,7 @@ const BPortfolioScreen = () => {
   const [portfolio, setPortfolio] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [bondHoldings, setBondHoldings] = useState([]);
 
   useEffect(() => {
     if (!username) return;  // Prevents API call if username is undefined
@@ -44,6 +45,24 @@ const BPortfolioScreen = () => {
     };
     fetchPortfolio();
   }, [username]); // Dependency array ensures re-fetching only when username changes
+
+  useEffect(() => {
+    const fetchBonds = async () => {
+      try {
+        // Fetch bond data using the API URL and the username parameter
+        const response = await axios.get(`${api}/api/bonds/bonddata/${username}`);
+        // Assuming the response contains an array of bonds under 'bonds' key
+        console.log("hai",response.data)
+        setBondHoldings(response.data); 
+        setLoading(false);
+      } catch (err) {
+        setError('Error fetching bond data');
+        setLoading(false);
+      }
+    };
+
+    fetchBonds();
+  }, [username]);
 
   const mergeHoldings = (holdings) => {
     const holdingsMap = {};
@@ -75,11 +94,6 @@ const BPortfolioScreen = () => {
   // Filtering and merging MutualFund holdings
   const mutualFundHoldings = mergeHoldings(
     portfolio?.holdings?.filter((holding) => holding.asset === "MutualFund") || []
-  );
-  
-  // Filtering and merging Bond holdings
-  const bondHoldings = mergeHoldings(
-    portfolio?.holdings?.filter((holding) => holding.asset === "Bond") || []
   );
   
   const renderHoldingItem = ({ item }) => (
@@ -120,54 +134,90 @@ const BPortfolioScreen = () => {
 
   const renderSGBItem = ({ item }) => (
     <View style={styles.holdingCard}>
-    <View style={styles.holdingCardContent}>
-      <View style={styles.holdingDetails}>
-        <Text style={styles.holdingName}>{item.name}</Text>
-        <Text style={styles.holdingAvg}>Avg: {item.bought_price}</Text>
-        <Text style={styles.holdingQuantity}>Quantity: {item.qty}</Text>
+      <View style={styles.holdingCardContent}>
+        <View style={styles.holdingDetails}>
+          <Text style={styles.holdingName}>{item.bond_name}</Text>
+          <Text style={styles.holdingAvg}>Coupon Rate: {item.coupon_rate}%</Text>
+          <Text style={styles.holdingQuantity}>Face Value: ₹{item.face_value}</Text>
+          <Text style={styles.holdingMaturity}>Maturity Date: {new Date(item.maturity).toLocaleDateString()}</Text>
+        </View>
       </View>
-      <TouchableOpacity
-        style={styles.addButtons}
-        onPress={() => navigation.navigate('EachHold',{ name: item.name, username: username,asset:"Bond" })}
-      >
-        <Ionicons name="chevron-forward" size={24} color="white" />
-      </TouchableOpacity>
     </View>
-  </View>
   );
-
-  const renderOverviewContent = () => (
-    <>
+  
+  const renderSGBCard = (type) => {
+    // Calculate the total invested value by summing up the face_value of all bonds
+    const totalInvested = bondHoldings.reduce((total, bond) => total + bond.face_value, 0);
+  
+    return (
       <View style={styles.summaryCard}>
-        <Text style={styles.label}>Invested Value</Text>
-        <Text style={styles.amount}>₹36,880</Text>
-        <Text style={styles.gain}>↑ Overall Gain ₹16,663.66 (+45.18%)</Text>
-        <Text style={styles.label}>Total Value</Text>
-        <Text style={styles.amount}>₹53,543.66</Text>
-        <Text style={styles.todayGain}>↑ Today’s Gain ₹802.56 (+1.53%)</Text>
+        <Text style={styles.label}>Total Invested in {type}</Text>
+        <Text style={styles.amount}>₹{totalInvested.toFixed(2)}</Text>
       </View>
-      <View style={styles.assetContainer}>
-        <Text style={styles.assetTitle}>Assets</Text>
-        <View style={styles.assetCard}>
-          <Text style={styles.assetLabel}>EQUITY</Text>
-          <Text style={styles.assetAmount}>₹36,880</Text>
-          <Text style={styles.gain}>+ ₹16,663.66 (+45.18%)</Text>
+    );
+  };  
+
+  const renderOverviewContent = () => {
+    // Get invested and total value for equity and mutual funds
+    const { investedValue: equityInvestedValue, totalValue: equityTotalValue } = renderSummaryCards("Equity");
+    const { investedValue: mutualFundInvestedValue, totalValue: mutualFundTotalValue } = renderSummaryCards("Mutual Funds");
+
+    // Calculate the total invested value and total value
+    const totalInvestedValue = equityInvestedValue + mutualFundInvestedValue;
+    const totalValue = equityTotalValue + mutualFundTotalValue;
+
+    // Calculate overall gain
+    const overallGain = totalValue - totalInvestedValue;
+    const gainPercentage = totalInvestedValue > 0 ? (overallGain / totalInvestedValue) * 100 : 0;
+
+    return (
+      <>
+        <View style={styles.summaryCard}>
+          <Text style={styles.label}>Invested Value</Text>
+          <Text style={styles.amount}>₹{totalInvestedValue.toFixed(2)}</Text>
+          <Text 
+            style={[styles.gain, { color: overallGain < 0 ? '#ff6347' : '#228b22' }]}
+          >
+            {overallGain < 0 ? '↓ Overall Loss' : '↑ Overall Gain'} ₹{overallGain.toFixed(2)} ({gainPercentage.toFixed(2)}%)
+          </Text>
+          <Text style={styles.label}>Total Value</Text>
+          <Text style={styles.amount}>₹{totalValue.toFixed(2)}</Text>
         </View>
 
-        <TouchableOpacity style={styles.actionCard}>
-          <Text style={styles.assetLabel}>MUTUAL FUNDS</Text>
-          <Text style={styles.actionText}>Start SIPs with just ₹500</Text>
-          <Text style={styles.actionButton}>START A SIP</Text>
-        </TouchableOpacity>
+        <View style={styles.assetContainer}>
+          <Text style={styles.assetTitle}>Assets</Text>
 
-        <TouchableOpacity style={styles.actionCard}>
-          <Text style={styles.assetLabel}>SGB</Text>
-          <Text style={styles.actionText}>Start Investing in Gold</Text>
-          <Text style={styles.actionButton}>GET STARTED</Text>
-        </TouchableOpacity>
-      </View>
-    </>
-  );
+          {/* Equity Section */}
+          <View style={styles.assetCard}>
+            <Text style={styles.assetLabel}>EQUITY</Text>
+            <Text style={styles.assetAmount}>Invested: ₹{equityInvestedValue.toFixed(2)}</Text>
+            <Text style={styles.assetAmount}>Total Value: ₹{equityTotalValue.toFixed(2)}</Text>
+            <Text style={[styles.gain, { color: (equityTotalValue - equityInvestedValue) < 0 ? '#ff6347' : '#228b22' }]}>
+              {equityTotalValue - equityInvestedValue < 0 ? '↓ Loss' : '↑ Gain'} ₹{(equityTotalValue - equityInvestedValue).toFixed(2)}
+            </Text>
+          </View>
+
+          {/* Mutual Funds Section */}
+          <View style={styles.assetCard}>
+            <Text style={styles.assetLabel}>MUTUAL FUNDS</Text>
+            <Text style={styles.assetAmount}>Invested: ₹{mutualFundInvestedValue.toFixed(2)}</Text>
+            <Text style={styles.assetAmount}>Total Value: ₹{mutualFundTotalValue.toFixed(2)}</Text>
+            <Text style={[styles.gain, { color: (mutualFundTotalValue - mutualFundInvestedValue) < 0 ? '#ff6347' : '#228b22' }]}>
+              {mutualFundTotalValue - mutualFundInvestedValue < 0 ? '↓ Loss' : '↑ Gain'} ₹{(mutualFundTotalValue - mutualFundInvestedValue).toFixed(2)}
+            </Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.actionCard} 
+            onPress={() => navigation.navigate("Bond", { username, asset: "Bond" })}
+          >
+            <Text style={styles.assetLabel}>SGB</Text>
+            <Text style={styles.actionText}>Start Investing in Gold</Text>
+            <Text style={styles.actionButton}>GET STARTED</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+    );
+};
 
 // Then use mergeHoldings inside renderSummaryCard
 const stockPrices = [
@@ -193,43 +243,43 @@ const getStockPrice = (stockName) => {
 // Mock data for Mutual Funds and their NAVs
 const mutualFundNavs = [
   {
-    mf_identifier: "Nippon India Small Cap Fund",
+    mf_identify: "Nippon India Small Cap Fund",
     nav: 145.8709
   },
   {
-    mf_identifier: "Nippon India Flexi Cap Fund",
+    mf_identify: "Nippon India Flexi Cap Fund",
     nav: 14.84 // Example NAV
   },
   {
-    mf_identifier: "Nippon India Power & Infra Fund",
+    mf_identify: "Nippon India Power & Infra Fund",
     nav: 294.58
   },
   {
-    mf_identifier: "ICICI Prudential Equity & Debt Fund",
+    mf_identify: "ICICI Prudential Equity & Debt Fund",
     nav: 28.90
   },
   {
-    mf_identifier: "HDFC Balanced Advantage Fund",
+    mf_identify: "HDFC Balanced Advantage Fund",
     nav: 476.05
   },
   {
-    mf_identifier: "SBI Equity Hybrid Fund",
+    mf_identify: "SBI Equity Hybrid Fund",
     nav: 87.29
   },
   {
-    mf_identifier: "Bank of India ELSS Tax Saver Dir Gr",
+    mf_identify: "Bank of India ELSS Tax Saver Dir Gr",
     nav: 163.93
   },
   {
-    mf_identifier: "Nippon India ELSS Tax Saver Dir Gr",
+    mf_identify: "Nippon India ELSS Tax Saver Dir Gr",
     nav: 122.78
   }
 ];
 
 // Function to get NAV for a mutual fund based on mf_identifier
-const getMutualFundNav = (mf_identifier) => {
-  const fund = mutualFundNavs.find(fund => fund.name === mf_identifier);
-  console.log(fund)
+const getMutualFundNav = (mf_identify) => {
+  const fund = mutualFundNavs.find(fund => fund.mf_identifier === mf_identify);
+  console.log(fund.nav)
   return fund ? fund.nav : 0; // Default to 0 if NAV is not found
 };
 
@@ -258,7 +308,7 @@ const renderSummaryCard = (type) => {
     const mutualFundHoldings = mergeHoldings(
       portfolio?.holdings?.filter((holding) => holding.asset === "MutualFund") || []
     );
-
+    console.log(mutualFundHoldings)
     investedValue = mutualFundHoldings.reduce(
       (total, mf) => total + parseFloat(mf.bought_price) * mf.qty, 
       0
@@ -269,7 +319,6 @@ const renderSummaryCard = (type) => {
       return total + currentNav * mf.qty; // Multiply qty by the NAV to calculate total value
     }, 0);
   }
-
   const overallGain = totalValue - investedValue;
   const gainPercentage = investedValue > 0 ? (overallGain / investedValue) * 100 : 0;
 
@@ -283,12 +332,47 @@ const renderSummaryCard = (type) => {
         { color: overallGain < 0 ? '#ff6347' : '#228b22' } // Change color based on overallGain
       ]}
     >
-      {overallGain < 0 ? '↓' : '↑'} Overall Gain ₹{overallGain.toFixed(2)} ({gainPercentage.toFixed(2)}%)
+      {overallGain < 0 ? '↓ Overall Loss' : '↑ Overall Gain'}  ₹{overallGain.toFixed(2)} ({gainPercentage.toFixed(2)}%)
     </Text>
       <Text style={styles.label}>Total Value</Text>
       <Text style={styles.amount}>₹{totalValue.toFixed(2)}</Text>
     </View>
   );
+};
+
+const renderSummaryCards = (type) => {
+  let investedValue = 0;
+  let totalValue = 0;
+
+  if (type === "Equity") {
+    const stockHoldings = mergeHoldings(
+      portfolio?.holdings?.filter((holding) => holding.asset === "Stock") || []
+    );
+    investedValue = stockHoldings.reduce(
+      (total, stock) => total + parseFloat(stock.bought_price) * stock.qty, 
+      0
+    );
+
+    totalValue = stockHoldings.reduce((total, stock) => {
+      const currentPrice = getStockPrice(stock.name);
+      return total + currentPrice * stock.qty;
+    }, 0);
+  } else if (type === "Mutual Funds") {
+    const mutualFundHoldings = mergeHoldings(
+      portfolio?.holdings?.filter((holding) => holding.asset === "MutualFund") || []
+    );
+    investedValue = mutualFundHoldings.reduce(
+      (total, mf) => total + parseFloat(mf.bought_price) * mf.qty, 
+      0
+    );
+    totalValue = mutualFundHoldings.reduce((total, mf) => {
+      const currentNav = getMutualFundNav(mf.mf_identifier); // Fetch NAV using mf_identifier
+      return total + currentNav * mf.qty; // Multiply qty by the NAV to calculate total value
+    }, 0);
+  }
+  const overallGain = totalValue - investedValue;
+  const gainPercentage = investedValue > 0 ? (overallGain / investedValue) * 100 : 0;
+  return { investedValue, totalValue };
 };
 
   return (
@@ -367,7 +451,7 @@ const renderSummaryCard = (type) => {
             {/* Show Summary Card and SGB for "SGB" */}
             {selectedTab === "SGB" && (
               <>
-                {renderSummaryCard("SGB")}
+                {renderSGBCard("SGB")}
                 {bondHoldings.length > 0 ? (
                   <View>
                     <SearchBar
@@ -375,12 +459,12 @@ const renderSummaryCard = (type) => {
                       searchTerm={searchTermSGB}
                       setSearchTerm={setSearchTermSGB}
                       onAddPress={() =>
-                        navigation.navigate("Investments", { username, asset: "Bond" })
+                        navigation.navigate("Bond", { username, asset: "Bond" })
                       }
                     />
                     <FlatList
-                      data={bondHoldings} // Ensure bondHoldings is used
-                      keyExtractor={(item) => item._id}
+                      data={bondHoldings} // Use bondHoldings as the data source
+                      keyExtractor={(item) => item._id} // Assuming bond_id is unique
                       renderItem={renderSGBItem}
                       style={styles.holdingsList}
                     />
@@ -392,7 +476,7 @@ const renderSummaryCard = (type) => {
                       searchTerm={searchTermSGB}
                       setSearchTerm={setSearchTermSGB}
                       onAddPress={() =>
-                        navigation.navigate("Investments", { username, asset: "Bond" })
+                        navigation.navigate("Bond", { username, asset: "Bond" })
                       }
                     />
                   <Text style={styles.noHoldingsText}>No SGB available</Text></View>
@@ -455,7 +539,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginTop: 20,
   },
-  title: { fontSize: 22, fontWeight: "bold", color: "white",fontFamily:"monospace" },
+  title: { fontSize: 22, fontWeight: "bold", color: "white",fontFamily:"Bebas Neue" },
   scrollButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -469,14 +553,14 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 14,
     fontWeight: "bold",
-    fontFamily:"monospace",
+    fontFamily:"Bebas Neue",
   },
   selectedTab: {
     backgroundColor: "#2196F3", // Blue or any other color for the selected tab
   },
   selectedTabText: {
     color: "#ffffff", // Text color for selected tab
-    fontFamily:"monospace",
+    fontFamily:"Bebas Neue",
   },
   searchBarContainer: {
     flexDirection: "row",
@@ -507,7 +591,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 14,
     fontWeight: "bold",
-    fontFamily:"monospace",
+    fontFamily:"Bebas Neue",
   },
   summaryCard: {
     backgroundColor: "#1E1E1E",
@@ -517,8 +601,8 @@ const styles = StyleSheet.create({
     marginTop: 40,
     elevation: 5,
   },
-  label: { color: "gray", fontSize: 14,fontFamily:"monospace" },
-  amount: { fontSize: 22, color: "white", fontWeight: "bold",fontFamily:"monospace" },
+  label: { color: "gray", fontSize: 14,fontFamily:"Bebas Neue" },
+  amount: { fontSize: 22, color: "white", fontWeight: "bold",fontFamily:"Bebas Neue" },
   gain: { color: "#4CAF50", fontSize: 14, marginTop: 5 },
   todayGain: { color: "#FF9800", fontSize: 14, marginTop: 5 },
   button: {
@@ -529,14 +613,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 15,
   },
-  buttonText: { color: "white", fontWeight: "bold", fontSize: 16,fontFamily:"monospace" },
+  buttonText: { color: "white", fontWeight: "bold", fontSize: 16,fontFamily:"Bebas Neue" },
   assetContainer: { marginBottom: 20 },
   assetTitle: {
     fontSize: 18,
     fontWeight: "bold",
     color: "white",
     marginBottom: 15,
-    fontFamily:"monospace",
+    fontFamily:"Bebas Neue",
   },
   assetCard: {
     backgroundColor: "#1E1E1E",
@@ -545,8 +629,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     elevation: 3,
   },
-  assetLabel: { color: "white", fontSize: 16, fontWeight: "bold",fontFamily:"monospace" },
-  assetAmount: { color: "white", fontSize: 18, marginTop: 5,fontFamily:"monospace" },
+  assetLabel: { color: "white", fontSize: 16, fontWeight: "bold",fontFamily:"Bebas Neue" },
+  assetAmount: { color: "white", fontSize: 18, marginTop: 5,fontFamily:"Bebas Neue" },
   actionCard: {
     backgroundColor: "#2A2A2A",
     padding: 20,
@@ -554,36 +638,36 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     elevation: 3,
   },
-  actionText: { color: "gray", fontSize: 14,fontFamily:"monospace" },
+  actionText: { color: "gray", fontSize: 14,fontFamily:"Bebas Neue" },
   actionButton: {
     color: "#2196F3",
     fontWeight: "bold",
     fontSize: 16,
     marginTop: 10,
   },
-  holdingsList: { marginBottom: 450,backgroundColor:"black",fontFamily:"monospace" },
+  holdingsList: { marginBottom: 450,backgroundColor:"black",fontFamily:"Bebas Neue" },
   holdingCard: {
     backgroundColor: "#1E1E1E",
     padding: 16,
     borderRadius: 10,
     marginBottom: 10,
   },
-  holdingName: { color: "white", fontSize: 16, fontWeight: "bold",fontFamily:"monospace" },
-  holdingAvg: { color: "white", fontSize: 14,fontFamily:"monospace" },
-  holdingCurrentPrice: { color: "white", fontSize: 14,fontFamily:"monospace" },
-  holdingChange: { color: "white", fontSize: 14,fontFamily:"monospace" },
-  holdingQuantity: { color: "white", fontSize: 14,fontFamily:"monospace" },
-  holdingLtp: { color: "white", fontSize: 14,fontFamily:"monospace" },
-  noHoldingsText: { color: "white", fontSize: 16, textAlign: "center",fontFamily:"monospace"},
+  holdingName: { color: "white", fontSize: 16, fontWeight: "bold",fontFamily:"Bebas Neue" },
+  holdingAvg: { color: "white", fontSize: 14,fontFamily:"Bebas Neue" },
+  holdingCurrentPrice: { color: "white", fontSize: 14,fontFamily:"Bebas Neue" },
+  holdingChange: { color: "white", fontSize: 14,fontFamily:"Bebas Neue" },
+  holdingQuantity: { color: "white", fontSize: 14,fontFamily:"Bebas Neue" },
+  holdingLtp: { color: "white", fontSize: 14,fontFamily:"Bebas Neue" },
+  noHoldingsText: { color: "white", fontSize: 16, textAlign: "center",fontFamily:"Bebas Neue"},
   holdingCardContent: {
     flexDirection: "row",
     justifyContent: "space-between", // Position the "+" button to the right
     alignItems: "center", // Align content vertically in the center
-    fontFamily:"monospace",
+    fontFamily:"Bebas Neue",
   },
   holdingDetails: {
     flex: 1, // Ensure the holding details take up available space
-    fontFamily:"monospace",
+    fontFamily:"Bebas Neue",
   },
   addButton: {
     backgroundColor: "#2196F3", // Color for the "+" button
@@ -599,7 +683,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
-    fontFamily:"monospace",
+    fontFamily:"Bebas Neue",
   },
   sgbContainer: {
     flexGrow: 1,
@@ -616,12 +700,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
-    fontFamily:"monospace",
+    fontFamily:"Bebas Neue",
   },
   sgbDetails: {
     color: "gray",
     fontSize: 14,
-    fontFamily:"monospace"
+    fontFamily:"Bebas Neue"
   },
 });
 export default BPortfolioScreen;
