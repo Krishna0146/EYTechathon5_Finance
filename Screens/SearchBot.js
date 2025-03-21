@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from "react-native";
-
-const API_URL = "http://192.168.68.119:9000"; // Update with your backend URL
+import api from "./api";
 
 export default function ChatSearchScreen({ route }) {
   const { query, searchText, type } = route.params || {};
@@ -24,7 +23,7 @@ export default function ChatSearchScreen({ route }) {
     setLoading(true);
     try {
       // Only add the bot's response after the backend sends a reply
-      const response = await fetch(`${API_URL}/chat`, {
+      const response = await fetch(`${api}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ chat: text, history: [] }),
@@ -58,7 +57,7 @@ export default function ChatSearchScreen({ route }) {
 
     try {
       // Send the reply to the backend
-      const response = await fetch(`${API_URL}/chat`, {
+      const response = await fetch(`${api}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ chat: text, history: messages }),

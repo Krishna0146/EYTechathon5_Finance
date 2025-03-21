@@ -532,180 +532,185 @@ const renderSummaryCards = (type) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#121212", padding: 16 },
+  container: { flex: 1, backgroundColor: "white", padding: 16 },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 16,
     marginTop: 20,
   },
-  title: { fontSize: 22, fontWeight: "bold", color: "white",fontFamily:"Bebas Neue" },
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#228b22",
+    fontFamily: "Bebas Neue",
+  },
   scrollButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: "#1E1E1E",
+    backgroundColor: "white",
     borderRadius: 25,
     marginRight: 10,
     justifyContent: "center",
     alignItems: "center",
+    borderColor: "#228b22",
+    borderWidth: 1,
   },
   scrollButtonText: {
-    color: "white",
+    color: "#228b22",
     fontSize: 14,
     fontWeight: "bold",
-    fontFamily:"Bebas Neue",
+    fontFamily: "Bebas Neue",
   },
   selectedTab: {
-    backgroundColor: "#2196F3", // Blue or any other color for the selected tab
+    backgroundColor: "#228b22",
   },
   selectedTabText: {
-    color: "#ffffff", // Text color for selected tab
-    fontFamily:"Bebas Neue",
+    color: "#ffffff",
+    fontFamily: "Bebas Neue",
   },
-  searchBarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#2A2A2A",
-    borderRadius: 8,
-    padding: 10,
-    marginTop: 10,
+  holdingCard: {
+    backgroundColor: "#333333",
+    padding: 16,
+    borderRadius: 10,
     marginBottom: 10,
-  },
-  searchBar: {
-    flex: 1,
-    color: "white",
-    fontSize: 16,
-    paddingLeft: 10,
-  },
-  searchIcon: {
-    marginRight: 10,
-  },
-  addButton: {
-    backgroundColor: "#2196F3",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    marginLeft: 10,
-  },
-  addButtonText: {
-    color: "white",
-    fontSize: 14,
-    fontWeight: "bold",
-    fontFamily:"Bebas Neue",
+    marginHorizontal: 16,
   },
   summaryCard: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: "#ffffff",
     padding: 20,
     borderRadius: 12,
-    marginBottom: 20,
     marginTop: 40,
+    marginBottom: 20,
     elevation: 5,
   },
-  label: { color: "gray", fontSize: 14,fontFamily:"Bebas Neue" },
-  amount: { fontSize: 22, color: "white", fontWeight: "bold",fontFamily:"Bebas Neue" },
-  gain: { color: "#4CAF50", fontSize: 14, marginTop: 5 },
-  todayGain: { color: "#FF9800", fontSize: 14, marginTop: 5 },
-  button: {
-    backgroundColor: "#2196F3",
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 5,
-    alignItems: "center",
-    marginTop: 15,
+  label: {
+    color: "black",
+    fontSize: 15,
+    fontFamily: "Bebas Neue",
   },
-  buttonText: { color: "white", fontWeight: "bold", fontSize: 16,fontFamily:"Bebas Neue" },
+  amount: {
+    fontSize: 22,
+    color: "#3A3A3A",
+    fontWeight: "bold",
+    fontFamily: "Bebas Neue",
+  },
+  gain: {
+    color: "#66BB6A",
+    fontSize: 14,
+    fontFamily: "Bebas Neue",
+    marginTop: 5,
+    marginBottom: 4,
+  },
+  todayGain: {
+    color: "#FFB74D",
+    fontSize: 14,
+    fontFamily: "Bebas Neue",
+    marginTop: 5,
+    marginBottom: 4,
+  },
+  holdingCard: {
+    width: '100%', // Occupy full width of the screen
+    backgroundColor: '#f5f5f5', // Background color
+    padding: 16, // Padding inside the card
+    borderRadius: 12, // Rounded corners
+    marginBottom: 12, // Bottom margin for spacing
+    elevation: 5, // Shadow effect for Android
+    shadowColor: '#000', // Shadow color for iOS
+    shadowOffset: { width: 0, height: 2 }, // Shadow position for iOS
+    shadowOpacity: 0.1, // Shadow transparency for iOS
+    shadowRadius: 4, // Shadow blur for iOS
+  },
+  holdingCardContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  holdingDetails: {
+    flex: 1,
+  },
+  holdingName: {
+    color: "black",
+    fontSize: 16,
+    fontWeight: "bold",
+    fontFamily: "Bebas Neue",
+  },
+  holdingAvg: {
+    color: "black",
+    fontSize: 14,
+    fontFamily: "Bebas Neue",
+  },
+  holdingQuantity: {
+    color: "black",
+    fontSize: 14,
+    fontFamily: "Bebas Neue",
+  },
+  addButtons: {
+    backgroundColor: "#555",
+    padding: 8,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  noHoldingsText: {
+    color: "#333",
+    fontSize: 16,
+    textAlign: "center",
+    fontFamily: "Bebas Neue",
+  },
+  holdingsList: {
+    marginBottom: 400,
+  },
+  placeholderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: 230,
+  },
   assetContainer: { marginBottom: 20 },
   assetTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "white",
+    color: "#3A3A3A",
+    fontFamily: "Bebas Neue",
     marginBottom: 15,
-    fontFamily:"Bebas Neue",
   },
   assetCard: {
-    backgroundColor: "#1E1E1E",
+    backgroundColor: "#ffffff",
     padding: 20,
     borderRadius: 12,
     marginBottom: 15,
     elevation: 3,
   },
-  assetLabel: { color: "white", fontSize: 16, fontWeight: "bold",fontFamily:"Bebas Neue" },
-  assetAmount: { color: "white", fontSize: 18, marginTop: 5,fontFamily:"Bebas Neue" },
-  actionCard: {
-    backgroundColor: "#2A2A2A",
-    padding: 20,
-    borderRadius: 12,
-    marginBottom: 15,
-    elevation: 3,
-  },
-  actionText: { color: "gray", fontSize: 14,fontFamily:"Bebas Neue" },
-  actionButton: {
-    color: "#2196F3",
-    fontWeight: "bold",
+  assetLabel: {
+    color: "#3A3A3A",
     fontSize: 16,
-    marginTop: 10,
+    fontFamily: "Bebas Neue",
+    fontWeight: "bold",
   },
-  holdingsList: { marginBottom: 450,backgroundColor:"black",fontFamily:"Bebas Neue" },
-  holdingCard: {
-    backgroundColor: "#1E1E1E",
-    padding: 16,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  holdingName: { color: "white", fontSize: 16, fontWeight: "bold",fontFamily:"Bebas Neue" },
-  holdingAvg: { color: "white", fontSize: 14,fontFamily:"Bebas Neue" },
-  holdingCurrentPrice: { color: "white", fontSize: 14,fontFamily:"Bebas Neue" },
-  holdingChange: { color: "white", fontSize: 14,fontFamily:"Bebas Neue" },
-  holdingQuantity: { color: "white", fontSize: 14,fontFamily:"Bebas Neue" },
-  holdingLtp: { color: "white", fontSize: 14,fontFamily:"Bebas Neue" },
-  noHoldingsText: { color: "white", fontSize: 16, textAlign: "center",fontFamily:"Bebas Neue"},
-  holdingCardContent: {
-    flexDirection: "row",
-    justifyContent: "space-between", // Position the "+" button to the right
-    alignItems: "center", // Align content vertically in the center
-    fontFamily:"Bebas Neue",
-  },
-  holdingDetails: {
-    flex: 1, // Ensure the holding details take up available space
-    fontFamily:"Bebas Neue",
-  },
-  addButton: {
-    backgroundColor: "#2196F3", // Color for the "+" button
-    padding: 10,
-    borderRadius: 10, // Make it circular
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  addButtons: {
-    marginRight: 10,
-  },
-  addButtonText: {
-    color: "white",
+  assetAmount: {
     fontSize: 18,
     fontWeight: "bold",
-    fontFamily:"Bebas Neue",
+    color: "#3A3A3A",
+    marginTop: 5,
+    fontFamily: "Bebas Neue",
   },
-  sgbContainer: {
-    flexGrow: 1,
-    padding: 10,
-    justifyContent: "center",
+  actionCard: {
+    backgroundColor: "#ffffff",
+    padding: 20,
+    borderRadius: 12,
+    marginBottom: 15,
+    elevation: 3,
+  }, actionText: {
+    fontSize: 14,
+    color: "#3A3A3A",
+    fontFamily: "Bebas Neue",
   },
-  sgbCard: {
-    backgroundColor: "#1E1E1E",
-    padding: 16,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  sgbName: {
-    color: "white",
+  actionButton: {
     fontSize: 16,
     fontWeight: "bold",
-    fontFamily:"Bebas Neue",
+    color: "#228b22",
+    marginTop: 10,
   },
-  sgbDetails: {
-    color: "gray",
-    fontSize: 14,
-    fontFamily:"Bebas Neue"
-  },
+
 });
 export default BPortfolioScreen;

@@ -20,7 +20,7 @@
     "axios": "^0.21.1",
     "expo-asset": "^11.0.3",
     "expo-constants": "^17.0.4",
-    "expo-linear-gradient": "^14.0.1",
+    "expo-linear-gradient": "^14.0.2",
     "expo-localization": "^16.0.1",
     "expo-notifications": "^0.29.12",
     "expo-status-bar": "~2.0.0",

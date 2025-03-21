@@ -7,7 +7,8 @@ import {
   ScrollView,
   Modal,
   ActivityIndicator,
-  TextInput,Alert
+  TextInput,
+  Alert
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import axios from "axios";
@@ -16,16 +17,16 @@ import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from "react-native-modal-datetime-picker"; 
 
 const EachHold = ({ route }) => {
-  const { name, username,asset } = route.params;
+  const { name, username, asset } = route.params;
   const navigate = useNavigation();
-  const [sellingPrice, setSellingPrice] = useState(""); 
+  const [sellingPrice, setSellingPrice] = useState("");
   const [sellingQuantity, setSellingQuantity] = useState("");
   const [sellingDate, setSellingDate] = useState("");
   const [purchaseHistory, setPurchaseHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
-  const [selectedMenuId, setSelectedMenuId] = useState(null); // Tracks the open menu
+  const [selectedMenuId, setSelectedMenuId] = useState(null);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isSellDatePickerVisible, setSellDatePickerVisibility] = useState(false);
 
@@ -37,30 +38,30 @@ const EachHold = ({ route }) => {
     if (purchaseHistory.length === 0) {
       fetchPortfolioData();
     }
-  }, [purchaseHistory]); // Runs when purchaseHistory updates  
+  }, [purchaseHistory]); // Runs when purchaseHistory updates
 
   const fetchPortfolioData = async () => {
     try {
       const response = await axios.get(`${api}/api/holdings/portfolio/${username}/${name}`);
-      console.log(response)
+      console.log(response);
       const portfolio = response.data;
+      
+      if (portfolio.holdings && portfolio.holdings.length > 0) {
       const formattedData = portfolio.holdings.map((holding) => ({
         id: holding._id,
         date: new Date(holding.date_purchased).toDateString(),
         quantity: holding.qty.toString(),
         value: holding.bought_price.toString(),
       }));
-      //console.log("format",formattedData);
-      //console.log(portfolio.holdings[0].asset);
-      //console.log(portfolio.holdings[0].name);
-      // if (formattedData.length === 0) {
-      //   navigate.navigate("Portfolio",{username}); // Redirect if no data is present
-      //   return;
-      // }
       setPurchaseHistory(formattedData);
+      } else {
+        setPurchaseHistory([]);
+    }
+      
       setLoading(false);
     } catch (error) {
       console.error("Error fetching portfolio:", error);
+      setPurchaseHistory([]);
       setLoading(false);
     }
   };
@@ -68,19 +69,18 @@ const EachHold = ({ route }) => {
   const handleEditPress = (record) => {
     setSelectedRecord({ ...record });
     setEditModalVisible(true);
-    setSelectedMenuId(null); // Close menu after selecting an option
-  };
+    setSelectedMenuId(null);
+};
 
   const handleSell = async () => {
-    console.log("handleSell function is executing...");    
+    console.log("handleSell function is executing...");
     console.log("handel sell is ok....")
-    //✅ Validate Inputs Before API Call
     if (!username || !asset || !name || !sellingPrice || !sellingQuantity || !sellingDate) {
       Alert.alert("Error", "All fields are required!");
       return;
     }
     try {
-      const response = await axios.post(`${api}/api/sellings/sell`, {  // ✅ Fixed API route
+      const response = await axios.post(`${api}/api/sellings/sell`, {
         username,
         asset,
         name,
@@ -101,22 +101,29 @@ const EachHold = ({ route }) => {
     try {
       const response = await axios.delete(`${api}/api/holdings/delete/${username}/${id}`);
       console.log("Delete Response Data:", response.data); // Debugging log
-  
+
       if (response.data && response.data.message === "Holding deleted successfully") {
         console.log("Holding deleted, updating state...");
-        setPurchaseHistory((prev) => prev.filter((record) => record.id !== id)); // Remove deleted record
+
+        setPurchaseHistory((prev) => {
+          const updatedHistory = prev.filter((record) => record.id !== id);
+
+          if (updatedHistory.length === 0) {
+            fetchPortfolioData();
+          }
+
+          return updatedHistory;
+        });
+
+        Alert.alert("Success", "Holding deleted successfully");
       }
     } catch (error) {
-      // Check if the error is a 404 error related to fetching portfolio
-      if (error.response && error.response.status === 404) {
-        console.error('No record present');
-        // Handle the 404 error specifically, such as showing a custom message to the user
-      } else {
-        console.error("Error deleting record:", error); // Handle other errors
-      }
+      console.error("Error deleting record:", error);
+      Alert.alert("Error", "Failed to delete the holding. Please try again.");
     }
+
     setSelectedMenuId(null);
-  };  
+};
 
   const handleUpdate = async () => {
     if (!selectedRecord) return;
@@ -140,59 +147,59 @@ const EachHold = ({ route }) => {
     <ScrollView style={styles.container}>
       {/* Sell Block */}
       <View style={styles.sellBlock}>
-      {/* Traffic Light Icons */}
-      <View style={styles.tools}>
-        <View style={[styles.circle, styles.red]} />
-        <View style={[styles.circle, styles.yellow]} />
-        <View style={[styles.circle, styles.green]} />
+        {/* Traffic Light Icons */}
+        <View style={styles.tools}>
+          <View style={[styles.circle, styles.red]} />
+          <View style={[styles.circle, styles.yellow]} />
+          <View style={[styles.circle, styles.green]} />
+        </View>
+
+        <Text style={styles.sellHeading}>SELL</Text>
+
+        {/* Input Fields */}
+        <TextInput
+          style={styles.input}
+          placeholder="Selling Price"
+          placeholderTextColor="#aaa"
+          keyboardType="numeric"
+          value={sellingPrice}
+          onChangeText={setSellingPrice}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Selling Quantity"
+          placeholderTextColor="#aaa"
+          keyboardType="numeric"
+          value={sellingQuantity}
+          onChangeText={setSellingQuantity}
+        />
+
+        <TouchableOpacity style={styles.input} onPress={() => setSellDatePickerVisibility(true)}>
+          <Text style={styles.dateText}>{sellingDate || "Select Selling Date"}</Text>
+        </TouchableOpacity>
+
+        <DateTimePickerModal
+          isVisible={isSellDatePickerVisible}
+          mode="date"
+          onConfirm={(date) => {
+            setSellingDate(date.toDateString());
+            setSellDatePickerVisibility(false);
+          }}
+          onCancel={() => setSellDatePickerVisibility(false)}
+        />
+
+        {/* Sell Button */}
+        <TouchableOpacity
+          style={styles.sellButton}
+          onPress={() => {
+            console.log("Sell button pressed!");  // Debugging log
+            handleSell();
+          }}
+        >
+          <Text style={styles.buttonText}>Sell</Text>
+        </TouchableOpacity>
       </View>
-
-      <Text style={styles.sellHeading}>SELL</Text>
-
-      {/* Input Fields */}
-      <TextInput
-        style={styles.input}
-        placeholder="Selling Price"
-        placeholderTextColor="#aaa"
-        keyboardType="numeric"
-        value={sellingPrice}
-        onChangeText={setSellingPrice}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Selling Quantity"
-        placeholderTextColor="#aaa"
-        keyboardType="numeric"
-        value={sellingQuantity}
-        onChangeText={setSellingQuantity}
-      />
-
-      <TouchableOpacity style={styles.input} onPress={() => setSellDatePickerVisibility(true)}>
-        <Text style={styles.dateText}>{sellingDate || "Select Selling Date"}</Text>
-      </TouchableOpacity>
-
-      <DateTimePickerModal
-        isVisible={isSellDatePickerVisible}
-        mode="date"
-        onConfirm={(date) => {
-          setSellingDate(date.toDateString());
-          setSellDatePickerVisibility(false);
-        }}
-        onCancel={() => setSellDatePickerVisibility(false)}
-      />
-
-      {/* Sell Button */}
-      <TouchableOpacity
-        style={styles.sellButton}
-        onPress={() => {
-          console.log("Sell button pressed!");  // Debugging log
-          handleSell();
-        }}
-      >
-      <Text style={styles.buttonText}>Sell</Text>
-      </TouchableOpacity>
-    </View>
       <View style={styles.headerLine} />
       {/*header section*/}
       <View style={styles.header}>
@@ -204,7 +211,7 @@ const EachHold = ({ route }) => {
 
       {loading ? (
         <ActivityIndicator size="large" color="#007BFF" />
-      ) : purchaseHistory.length === 0 ? ( // Check if no records are present
+      ) : purchaseHistory.length === 0 ? (
         <View style={styles.noRecordsContainer}>
           <Text style={styles.noRecordsText}>No records present.</Text>
         </View>
@@ -216,7 +223,7 @@ const EachHold = ({ route }) => {
               <Text style={styles.recordQuantity}>{record.quantity}</Text>
               <View style={styles.valueContainer}>
                 <Text style={styles.recordValue}>₹{record.value}</Text>
-                
+
                 {/* Three Dots Button */}
                 <TouchableOpacity
                   style={styles.threeDotsButton}
@@ -226,7 +233,7 @@ const EachHold = ({ route }) => {
                 >
                   <Icon name="more-vert" size={24} color="#000" />
                 </TouchableOpacity>
-            
+
                 {/* Dropdown Menu */}
                 {selectedMenuId === record.id && (
                   <View style={styles.menuWrapper}>
@@ -245,6 +252,7 @@ const EachHold = ({ route }) => {
           ))}
         </ScrollView>
       )}
+
       {/* Edit Modal */}
       <Modal visible={editModalVisible} transparent={true} animationType="slide">
         <View style={styles.modalOverlay}>
@@ -300,6 +308,7 @@ const EachHold = ({ route }) => {
     </ScrollView>
   );
 };
+
 // **Updated Styles**
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#F5F5F5" },
@@ -382,19 +391,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 5,
     elevation: 2,
-    position: "relative", // Ensure menu positions correctly
+    position: "relative",
   },
   valueContainer: { flexDirection: "row", alignItems: "center" },
   threeDotsButton: { padding: 5 },
   recordDate: { fontSize: 16,fontFamily:"Bebas Neue" },
   recordQuantity: { fontSize: 16,fontFamily:"Bebas Neue" },
-  recordValue: { fontSize: 16, marginRight: 10,fontFamily:"Bebas Neue" },  
+  recordValue: { fontSize: 16, marginRight: 10,fontFamily:"Bebas Neue" },
   menuWrapper: {
     position: "absolute",
     top: -20,
     right: 0,
-    zIndex: 100,   // Make it higher
-    elevation: 10, // Required for Android
+    zIndex: 100,
+    elevation: 10,
   },
   menu: {
     backgroundColor: "#fff",
@@ -456,4 +465,5 @@ const styles = StyleSheet.create({
     fontFamily:"Bebas Neue"
   },
 });
+
 export default EachHold;

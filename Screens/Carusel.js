@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
+import { LinearGradient } from 'expo-linear-gradient'; // ✅ Corrected import
 
 const OnboardingScreen = ({ navigation }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -20,12 +21,12 @@ const OnboardingScreen = ({ navigation }) => {
       setCurrentSlide(currentSlide + 1);
     } else {
       await AsyncStorage.setItem('hasSeenOnboarding', 'true');
-      navigation.replace('Splash'); // Navigate to the next screen
+      navigation.replace('Splash');
     }
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#1c1c3c', '#3b5998', '#007bff']} style={styles.container}>
       <LottieView source={slides[currentSlide].animation} autoPlay loop style={styles.animation} />
       <Text style={styles.title}>{slides[currentSlide].text}</Text>
       <Text style={styles.description}>{slides[currentSlide].description}</Text>
@@ -37,7 +38,7 @@ const OnboardingScreen = ({ navigation }) => {
             key={index}
             style={[
               styles.dot,
-              { backgroundColor: currentSlide === index ? '#007bff' : '#ccc' }
+              { backgroundColor: currentSlide === index ? '#fff' : '#888' }
             ]}
           />
         ))}
@@ -48,7 +49,7 @@ const OnboardingScreen = ({ navigation }) => {
           {currentSlide === slides.length - 1 ? 'Start' : 'Next'}
         </Text>
       </TouchableOpacity>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -57,24 +58,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff', // Simple professional background
     padding: 20,
   },
   animation: {
-    width: 250,
-    height: 250,
+    width: 300,
+    height: 300,
     marginBottom: 20,
   },
   title: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
-    color: '#333',
+    color: '#fff',
   },
   description: {
     fontSize: 16,
-    color: '#666',
+    color: '#ddd',
     marginBottom: 20,
     textAlign: 'center',
     fontWeight: '500',
@@ -85,22 +85,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
     marginHorizontal: 5,
   },
   button: {
     paddingVertical: 14,
     paddingHorizontal: 30,
-    backgroundColor: '#007bff',
+    backgroundColor: '#fff',
     borderRadius: 25,
     marginTop: 10,
-    elevation: 3, // Slight shadow effect
+    elevation: 3,
   },
   buttonText: {
     fontSize: 16,
-    color: 'white',
+    color: '#007bff',
     fontWeight: '600',
   },
 });

@@ -26,7 +26,6 @@ import Portfolio from "./Screens/VirtualPortfolio/portfolios";
 import ScenarioList from "./Screens/RealWorldStimulate/MainReal";
 import BPortfolioScreen from "./Screens/portfoliobuilder/portfoliobuilder";
 import EachHold from "./Screens/portfoliobuilder/EachHold";
-import RecordSaleScreen from "./Screens/portfoliobuilder/RecordaSaleScreen";
 import InvestmentScreen from "./Screens/portfoliobuilder/investments";
 import DetailScreen from "./Screens/portfoliobuilder/DetailScreen";
 import CompoundInterestCalculator from "./Screens/FinancialCal/CompoundInt";
@@ -72,7 +71,6 @@ function App() {
           <Stack.Screen name="portfoliodetails" component={PortfolioDetails} />
           <Stack.Screen name="Portfolio" component={BPortfolioScreen}/>
           <Stack.Screen name="EachHold" component={EachHold} />
-          <Stack.Screen name="Record a sale" component={RecordSaleScreen} />
           <Stack.Screen name="Investments" component={InvestmentScreen} />
           <Stack.Screen name="DetailScreen" component={DetailScreen} />
           <Stack.Screen name="searchbot" component={ChatSearchScreen} />

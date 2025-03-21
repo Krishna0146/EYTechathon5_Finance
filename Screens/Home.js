@@ -9,14 +9,14 @@ const HomePage = () => {
   const navigate = useNavigation();
   const route = useRoute(); // Get the current route
   const { username } = route.params; // Extract username from the route params
-  
+
   const { t } = useTranslation();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Box1 - Header Section */}
-      <ImageBackground 
-  source={{ uri: 'https://img.freepik.com/free-vector/digital-rupee-technology-background-design_1017-36659.jpg' }} 
+      <ImageBackground
+  source={{ uri: 'https://img.freepik.com/free-vector/digital-rupee-technology-background-design_1017-36659.jpg' }}
   style={styles.box1}
   imageStyle={styles.box1Image}
 >
@@ -27,7 +27,7 @@ const HomePage = () => {
       <Text style={styles.userName}>{username}</Text>
     </View>
   </TouchableOpacity>
-</ImageBackground> 
+</ImageBackground>
       {/* Box2 - Content Section (8 Rectangular Boxes) */}
       <View style={styles.box2}>
         {/** Rows for different features */}
@@ -104,7 +104,7 @@ const HomePage = () => {
         </TouchableOpacity>
         </View>
         <View style={styles.row}>
-         
+
           <TouchableOpacity
             style={styles.box}
             onPress={() => navigate.push('SNews')}>
