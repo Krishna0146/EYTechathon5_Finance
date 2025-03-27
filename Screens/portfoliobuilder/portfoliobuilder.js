@@ -378,12 +378,20 @@ const renderSummaryCards = (type) => {
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#121212" />
+      
       <FlatList
         data={[]}
         ListHeaderComponent={
+          
           <View style={[styles.container, { flex: 1 }]}>
             <View style={styles.header}>
-              <Text style={styles.title}>Holdings</Text>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={{ position: "absolute",top: 4, left: -4 }}
+            >
+              <Ionicons name="arrow-back" size={24} color="black" />
+            </TouchableOpacity>
+              <Text style={styles.title}>Virtual Portfolio</Text>
             </View>
 
             <FlatList
@@ -540,9 +548,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   title: {
+    left  : 25,
     fontSize: 22,
     fontWeight: "bold",
-    color: "#228b22",
+    color: "black",
     fontFamily: "Bebas Neue",
   },
   scrollButton: {

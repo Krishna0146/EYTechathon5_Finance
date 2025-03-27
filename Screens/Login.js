@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderWidth: 1,
     borderColor: "#ccc",
-    fontFamily: "Inter",
+    fontFamily: "Bebas Neue",
   },
   button: {
     width: "100%",
@@ -291,12 +291,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderWidth: 1,
     borderColor: "#ccc",
-    fontFamily: "Inter",
+    fontFamily: "Bebas Neue",
   },
   otpButton: {
     width: "30%",
     height: 50,
-    backgroundColor: "#3399ff",
+    backgroundColor: "#228b22",
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -319,12 +319,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
-  normalText: { fontSize: 16, color: "#555", fontFamily: "Inter" },
+  normalText: { fontSize: 16, color: "#555", fontFamily: "Bebas Neue" },
   signUpLink: {
     fontSize: 16,
     color: "#228b22",
     textDecorationLine: "underline",
-    fontFamily: "Montserrat",
+    fontFamily: "Bebas Neue",
   },
   codeFieldRoot: {
     width: "80%",
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#333",
-    fontFamily: "Inter",
+    fontFamily: "Bebas Neue",
   },
   headerContainer: {
     width: "100%",

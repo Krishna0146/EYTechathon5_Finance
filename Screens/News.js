@@ -9,10 +9,13 @@ import {
   Linking,
 } from "react-native";
 import axios from "axios";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native"
 
 const fallbackImage = require("../assets/banking.png"); // ✅ Local fallback image
 
 const News = () => {
+  const navigation = useNavigation();
   const [news, setNews] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [imageErrors, setImageErrors] = useState({});
@@ -95,6 +98,12 @@ const News = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+      onPress={() => navigation.goBack()}
+      style={{ position: "absolute", top: 26, left: 15 }}
+    >
+      <Ionicons name="arrow-back" size={24} color="black" />
+    </TouchableOpacity>
     <Text style={styles.heading}>News</Text>
       {news.length === 0 ? (
         <Text style={styles.noNewsText}>No news available</Text>
@@ -135,10 +144,9 @@ const styles = {
   heading: {
     fontSize: 24, // Larger text size for heading
     fontWeight: "bold", // Bold text
-    textAlign: "center", // Center align
+    left: 30, // Align text to the left
     marginVertical: 10, // Space above and below
     color: "#333", // Dark color for better readability
-    backgroundColor:"lightblue"
   },
 };
 

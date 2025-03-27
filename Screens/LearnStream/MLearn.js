@@ -14,6 +14,7 @@ import {
 import { ProgressBar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import { Ionicons } from "@expo/vector-icons";
 
 import tinycolor from "tinycolor2";
 
@@ -153,7 +154,13 @@ export default function UserDashboard() {
           </View>
         </View> */}
         {/* <Text style={styles.mainHeading}>Start Learning</Text> */}
-        <Text style={styles.modulesHeading}>Modules</Text>
+        <TouchableOpacity
+      onPress={() => navigation.goBack()}
+      style={{ position: "absolute", top: 18, left: 10 }}
+    >
+      <Ionicons name="arrow-back" size={24} color="black" />
+    </TouchableOpacity>
+        <Text style={styles.modulesHeading}>Learning Stream</Text>
         <View style={styles.modulesContainer}>
           {modules.map((module, index) => {
             const baseColor = colors[index];
@@ -209,7 +216,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "left",
-    marginLeft: 10,
+    marginLeft: 40,
     marginBottom: 10,
     marginTop: 15,
     color: "#333",

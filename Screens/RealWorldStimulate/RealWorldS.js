@@ -150,14 +150,14 @@ const styles = StyleSheet.create({
   },
   userMessage: {
     alignSelf: "flex-end",
-    backgroundColor: "#0984e3",
+    backgroundColor: "#228b22",
     color: "#fff"
   },
   messageText: {
     fontSize: 16
   },
   optionButton: {
-    backgroundColor: "#74b9ff",
+    backgroundColor: "#228b22",
     padding: 8,
     marginTop: 5,
     borderRadius: 5

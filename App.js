@@ -1,7 +1,5 @@
 import React from "react";
 import { StatusBar } from 'react-native';
-import i18n from './i18n';
-import { I18nextProvider } from 'react-i18next';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SplashScreen from "./Screens/SplashScreen";
@@ -20,16 +18,12 @@ import ChatScreen from "./Screens/ChatBot";
 import UserDashboard from "./Screens/LearnStream/MLearn";
 import ScenarioDetail from "./Screens/LearnStream/ModuleDetail";
 import Conversation from "./Screens/RealWorldStimulate/RealWorldS";
-import PortfolioDetails from "./Screens/VirtualPortfolio/portfoliodetails";
-import PortfolioScreen from "./Screens/VirtualPortfolio/virtualportfolio";
-import Portfolio from "./Screens/VirtualPortfolio/portfolios";
 import ScenarioList from "./Screens/RealWorldStimulate/MainReal";
 import BPortfolioScreen from "./Screens/portfoliobuilder/portfoliobuilder";
 import EachHold from "./Screens/portfoliobuilder/EachHold";
 import InvestmentScreen from "./Screens/portfoliobuilder/investments";
 import DetailScreen from "./Screens/portfoliobuilder/DetailScreen";
 import CompoundInterestCalculator from "./Screens/FinancialCal/CompoundInt";
-import Sectors from "./Screens/RealWorldStimulate/Sector";
 import LoanEMICalculator from "./Screens/FinancialCal/LoanEMIcal";
 import ModuleDetailScreen from "./Screens/LearnStream/ModuleDetail";
 import ChatSearchScreen from "./Screens/SearchBot";
@@ -40,7 +34,6 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   return (
-    <I18nextProvider i18n={i18n}>
       <NavigationContainer>
       <StatusBar barStyle="dark-content" hidden={false} />
         <Stack.Navigator initialRouteName="Slide" screenOptions={{ headerShown: false }}>
@@ -51,7 +44,6 @@ function App() {
           <Stack.Screen name="STQuiz" component={SQuizPage} />
           <Stack.Screen name="FTools" component={FinTools} />
           <Stack.Screen name="SNews" component={News} />
-          <Stack.Screen name="Sector" component={Sectors} />
           <Stack.Screen name="modulescreen" component={ModuleDetailScreen} />
           <Stack.Screen name="Expense" component={ExpenseTracker} />
           <Stack.Screen name="Login" component={LoginPage} />
@@ -66,9 +58,6 @@ function App() {
           <Stack.Screen name="conversation" component={Conversation} />
           <Stack.Screen name="real" component={ScenarioDetail} />
           <Stack.Screen name="compound" component={CompoundInterestCalculator} />
-          <Stack.Screen name="VirtualPortfolio" component={PortfolioScreen}/>
-          <Stack.Screen name="portfolios" component={Portfolio} />
-          <Stack.Screen name="portfoliodetails" component={PortfolioDetails} />
           <Stack.Screen name="Portfolio" component={BPortfolioScreen}/>
           <Stack.Screen name="EachHold" component={EachHold} />
           <Stack.Screen name="Investments" component={InvestmentScreen} />
@@ -77,7 +66,6 @@ function App() {
           <Stack.Screen name="loanemical" component={LoanEMICalculator} />
         </Stack.Navigator>
       </NavigationContainer>
-      </I18nextProvider>
   );
 }
 export default App;

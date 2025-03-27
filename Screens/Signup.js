@@ -33,7 +33,7 @@ export default function SignUpPage() {
   
       if (response.status >= 200 && response.status < 300) {
         // Successful response
-        Alert.alert('Registration Successful', `Welcome, ${username}!`);
+        Alert.alert('Registration Successful', Welcome, `${username}!`);
         navigation.push('Home', { username: response.data.username }); // Use the returned username directly
       } else {
         // In case response is not successful but no error is thrown
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%', 
     height: 50, 
-    backgroundColor: '#3399ff', 
+    backgroundColor: '#228b22', 
     borderRadius: 8, 
     justifyContent: 'center',
     alignItems: 'center', 
@@ -188,8 +188,8 @@ const styles = StyleSheet.create({
     fontFamily:"monospace"
   },
   loginLink: {
-    color: '#3399ff',
+    color: '#228b22',
     fontWeight: 'bold',
     textDecorationLine: 'underline',
-  },
+  },
 });

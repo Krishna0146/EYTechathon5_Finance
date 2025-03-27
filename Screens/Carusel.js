@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   dot: {
-    width: 12,
-    height: 12,
+    width: 10,
+    height: 10,
     borderRadius: 6,
     marginHorizontal: 5,
   },
