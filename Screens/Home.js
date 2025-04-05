@@ -2,14 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useTranslation } from 'react-i18next';
 import { useRoute } from '@react-navigation/native';
 
 const HomePage = () => {
   const navigate = useNavigation();
   const route = useRoute();
   const { username } = route.params;
-  const { t } = useTranslation();
 
   const animatedValue = new Animated.Value(1);
 
@@ -54,7 +52,7 @@ const HomePage = () => {
               onPress={() => navigate.push('userlearn')}
             >
               <Icon name="school" size={50} color="#228b22" style={styles.icon} />
-              <Text style={styles.boxName}>{t('Learning Stream')}</Text>
+              <Text style={styles.boxName}>Learning Stream</Text>
             </TouchableOpacity>
           </Animated.View>
           <Animated.View style={[styles.box, animatedStyle]}>
@@ -64,7 +62,7 @@ const HomePage = () => {
               onPress={() => navigate.push('mreal')}
             >
               <Icon name="trending-up" size={50} color="#228b22" style={styles.icon} />
-              <Text style={styles.boxName}>{t('Real World Scenario')}</Text>
+              <Text style={styles.boxName}>Real World Scenario</Text>
             </TouchableOpacity>
           </Animated.View>
         </View>
@@ -76,7 +74,7 @@ const HomePage = () => {
               onPress={() => navigate.push('Portfolio', { username })}
             >
               <Icon name="calculator" size={50} color="#228b22" style={styles.icon} />
-              <Text style={styles.boxName}>{t('Virtual Portfolio')}</Text>
+              <Text style={styles.boxName}>Virtual Portfolio</Text>
             </TouchableOpacity>
           </Animated.View>
           <Animated.View style={[styles.box, animatedStyle]}>
@@ -98,7 +96,7 @@ const HomePage = () => {
               onPress={() => navigate.push('SNews')}
             >
               <Icon name="newspaper" size={50} color="#228b22" style={styles.icon} />
-              <Text style={styles.boxName}>{t('News')}</Text>
+              <Text style={styles.boxName}>News</Text>
             </TouchableOpacity>
           </Animated.View>
           <Animated.View style={[styles.box, styles.comingSoonBox, animatedStyle]}>
@@ -108,7 +106,7 @@ const HomePage = () => {
               disabled={true}
             >
               <Icon name="construct" size={50} color="#555" style={styles.icon} />
-              <Text style={styles.boxName}>{t('Financial Tools')}</Text>
+              <Text style={styles.boxName}>Financial Tools</Text>
               <Text style={styles.comingSoonText}>Coming Soon</Text>
             </TouchableOpacity>
           </Animated.View>
@@ -121,7 +119,7 @@ const HomePage = () => {
               disabled={true}
             >
               <Icon name="stats-chart" size={50} color="#555" style={styles.icon} />
-              <Text style={styles.boxName}>{t('Financial HealthScore')}</Text>
+              <Text style={styles.boxName}>Financial Health Score</Text>
               <Text style={styles.comingSoonText}>Coming Soon</Text>
             </TouchableOpacity>
           </Animated.View>
@@ -132,7 +130,7 @@ const HomePage = () => {
               disabled={true}
             >
               <Icon name="link" size={50} color="#555" style={styles.icon} />
-              <Text style={styles.boxName}>{t('Link Portfolio')}</Text>
+              <Text style={styles.boxName}>Link Portfolio</Text>
               <Text style={styles.comingSoonText}>Coming Soon</Text>
             </TouchableOpacity>
           </Animated.View>

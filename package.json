@@ -45,6 +45,8 @@
     "react-native-modal-datetime-picker": "^18.0.0",
     "react-native-paper": "^5.13.1",
     "react-native-reanimated": "^3.16.7",
+    "react-native-render-html": "^6.3.4",
+    "react-native-rss-parser": "^1.5.1",
     "react-native-safe-area-context": "^5.1.0",
     "react-native-screens": "^4.4.0",
     "react-native-upi-payment": "^1.0.5",

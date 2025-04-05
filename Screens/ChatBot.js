@@ -7,10 +7,12 @@ import {
   FlatList,
   StyleSheet,
   Modal,
+  useWindowDimensions,
 } from "react-native";
 import { WebView } from "react-native-webview";
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from "@expo/vector-icons";
+import RenderHTML from 'react-native-render-html';
 import api from "./api";
 
 export default function ChatScreen() {
@@ -23,6 +25,23 @@ export default function ChatScreen() {
   const [webUrl, setWebUrl] = useState("");
   const scrollViewRef = useRef();
   const navigation = useNavigation();
+  const { width } = useWindowDimensions();
+
+  const convertMarkdownToHtml = (markdown) => {
+    let html = markdown;
+
+    html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<b><i>$1</i></b>'); // bold italic
+    html = html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');             // bold
+    html = html.replace(/\*(.*?)\*/g, '<i>$1</i>');                 // italic
+    html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');            // h3
+    html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');             // h2
+    html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');              // h1
+    html = html.replace(/^\d+\.\s(.*)$/gm, '<ol><li>$1</li></ol>'); // numbered list
+    html = html.replace(/^\s*-\s(.*)$/gm, '<ul><li>$1</li></ul>');  // bullet list
+    html = html.replace(/\n/g, '<br>');                             // line break
+
+    return `<div>${html}</div>`;
+  };
 
   const sendMessage = async () => {
     if (!chatInput.trim()) return;
@@ -75,43 +94,6 @@ export default function ChatScreen() {
         company: company,
       };
       setMessages((prev) => [...prev, dataMessage]);
-      setLoading(false);
-      return;
-    }
-
-    const compareMatch = chatInput.toLowerCase().match(/compare\s(\w+)\sand\s(\w+)/i);
-    if (compareMatch) {
-      const company1 = compareMatch[1];
-      const company2 = compareMatch[2];
-      const compareMessage = {
-        text: `Here is the comparison between ${company1} and ${company2}`,
-        role: "model",
-        type: "compare",
-        company1: company1,
-        company2: company2,
-      };
-      setMessages((prev) => [...prev, compareMessage]);
-      setLoading(false);
-      return;
-    }
-
-    const keywords = [
-      "finance", "financial", "investment", "invest", "stock", "stocks",
-      "bond", "bonds", "mutual fund", "mutual funds", "digital marketing",
-      "marketing", "portfolio", "asset", "assets", "trading", "trade", "price",
-      "amount", "money", "Investment", "Marketing", "Spending", "Selling",
-      "buying", "Buying"
-    ];
-    const containsKeyword = keywords.some((word) =>
-      chatInput.toLowerCase().includes(word.toLowerCase())
-    );
-
-    if (!containsKeyword) {
-      const irrelevantMsg = {
-        text: "⚠ Irrelevant data. Please ask about finance, marketing, or trading.",
-        role: "model",
-      };
-      setMessages((prev) => [...prev, irrelevantMsg]);
       setLoading(false);
       return;
     }
@@ -170,23 +152,6 @@ export default function ChatScreen() {
       );
     }
 
-    if (item.type === "compare") {
-      return (
-        <View style={[styles.message, styles.botMsg]}>
-          <Text style={styles.messageText}>{item.text}</Text>
-          <TouchableOpacity
-            style={styles.dataButton}
-            onPress={() => {
-              setWebUrl(`https://ticker.finology.in/company/${item.company1}/${item.company2}`);
-              setWebModalVisible(true);
-            }}
-          >
-            <Text style={styles.dataButtonText}>Compare</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
-
     return (
       <View
         style={[
@@ -194,7 +159,11 @@ export default function ChatScreen() {
           item.role === "user" ? styles.userMsg : styles.botMsg,
         ]}
       >
-        <Text style={styles.messageText}>{item.text}</Text>
+        <RenderHTML
+          contentWidth={width}
+          source={{ html: convertMarkdownToHtml(item.text) }}
+          baseStyle={styles.messageText}
+        />
       </View>
     );
   };
@@ -203,7 +172,7 @@ export default function ChatScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Ionicons name="arrow-back" size={24} color="black" />
+          <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerText}>Financial ChatBot</Text>
       </View>
@@ -222,6 +191,7 @@ export default function ChatScreen() {
         }
       />
 
+      {/* Video Modal */}
       <Modal
         visible={videoModalVisible}
         animationType="slide"
@@ -246,6 +216,7 @@ export default function ChatScreen() {
         </View>
       </Modal>
 
+      {/* Web Modal */}
       <Modal
         visible={webModalVisible}
         animationType="slide"
@@ -270,6 +241,7 @@ export default function ChatScreen() {
         </View>
       </Modal>
 
+      {/* Input Field */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}

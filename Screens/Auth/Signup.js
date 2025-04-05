@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
 import LottieView from "lottie-react-native";
-import api from "./api.js"
+import api from "../api.js"
 
 export default function SignUpPage() {
   const [username, setUsername] = useState('');
@@ -33,7 +33,7 @@ export default function SignUpPage() {
   
       if (response.status >= 200 && response.status < 300) {
         // Successful response
-        Alert.alert('Registration Successful', Welcome, `${username}!`);
+        Alert.alert('Registration Successful', `Welcome, ${username}!`);
         navigation.push('Home', { username: response.data.username }); // Use the returned username directly
       } else {
         // In case response is not successful but no error is thrown
@@ -60,7 +60,7 @@ export default function SignUpPage() {
       <View style={styles.container}>
         <View style={styles.animationContainer}>
           <LottieView 
-            source={require("../assets/animations/man-thinks.json")} 
+            source={require("../../assets/animations/man-thinks.json")} 
             autoPlay 
             loop 
             style={{ width: 200, height: 200 }} 

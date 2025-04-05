@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios'; // Import Axios
-import api from './api';
+import api from '../api';
 import LottieView from "lottie-react-native";
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 
@@ -119,7 +119,7 @@ export default function LoginPage() {
     <View style={styles.container}>
       <View style={styles.animationContainer}>
         <LottieView
-          source={require("../assets/animations/man-thinks.json")}
+          source={require("../../assets/animations/man-thinks.json")}
           autoPlay
           loop
           style={{ width: 200, height: 200 }}
