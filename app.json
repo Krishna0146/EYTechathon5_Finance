@@ -4,11 +4,11 @@
     "slug": "InvestBot",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/MainLogo.png",
+    "icon": "./assets/MainLogo.jpg",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/MainLogo.png",
+      "image": "./assets/MainLogo.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/MainLogo.png",
+        "foregroundImage": "./assets/MainLogo.jpg",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.InvestBot",
